@@ -1,0 +1,6 @@
+: [a-b], [0-1]
+numeros = 0
+letras = a
+{
+    letras.numeros | (letras | numeros).letras
+}

@@ -1,0 +1,11 @@
+:s,e,n,t,a,o,[0-4],[a-d],(,), =
+numeros = [0-2]
+letras = [a-c]
+traco = '-'
+vazio = ''
+parenteses1 = (
+parenteses2 = )
+igual = =
+{
+    (s.e | e.n.t.a.o | s.e.n.a.o | parenteses1 | parenteses2 | letras | igual.igual | igual)*
+}

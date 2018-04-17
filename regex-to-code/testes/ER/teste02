@@ -1,0 +1,7 @@
+:'a'..'z', '0'..'9', '_'
+letras = ['a'-'z']
+numeros = ['0'-'9']
+
+{
+	letras | letras+.(numeros.numeros* | '_' | letras)*
+}

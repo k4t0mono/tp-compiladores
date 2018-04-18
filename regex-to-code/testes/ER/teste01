@@ -1,4 +1,4 @@
-:[a-z], [0-9], =, ), (
+:[a-z], [0-9], =, ), (, "anything", 'anything', ', "
 numeros = [0-2]
 letras = [a-c]
 traco = '-'
@@ -7,5 +7,6 @@ parenteses1 = (
 parenteses2 = )
 igual = =
 {
-	(a.b.s.t.r.a.c.t | c.l.a.s.s | letras.(letras | numeros)* | 		igual | parenteses1 | parenteses2 | numeros)*
+	(a.b.s.t.r.a.c.t | c.l.a.s.s | letras.(letras | numeros)* | 		igual | parenteses1 | parenteses2 | numeros |
+	"anything" | 'anything')*
 }

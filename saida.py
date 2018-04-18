@@ -6,40 +6,46 @@ import sys
 from Token import Token
 from TabelaDeSimbolos import TabelaDeSimbolos
 
-tabela = TabelaDeSimbolos()
-tokens = []
+TABELA = TabelaDeSimbolos()
+TOKENS = []
 
 def q0(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return True
-    if(codigo[indice] == "b"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "c"):
-        indice+=1
-        return q1(codigo,indice)
-    if(codigo[indice] == "("):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "="):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "0"):
-        indice+=1
-        return q0(codigo,indice)
     if(codigo[indice] == "2"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == ")"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "1"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "a"):
+        indice+=1
+        return q1(codigo,indice)
+    if(codigo[indice] == "b"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "0"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "="):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "("):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "'"):
+        indice+=1
+        return charLiteral(codigo, indice)
+    if(codigo[indice] == '"'):
+        indice+=1
+        return stringLiteral(codigo, indice)
+    if(codigo[indice] == ")"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "c"):
         indice+=1
         return q2(codigo,indice)
     return False
@@ -47,37 +53,40 @@ def q0(codigo, indice):
 def q1(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return True
-    if(codigo[indice] == "b"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "c"):
-        indice+=1
-        return q1(codigo,indice)
-    if(codigo[indice] == "("):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "l"):
-        indice+=1
-        return q3(codigo,indice)
-    if(codigo[indice] == "="):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "0"):
-        indice+=1
-        return q0(codigo,indice)
     if(codigo[indice] == "2"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == ")"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "1"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "a"):
+        indice+=1
+        return q1(codigo,indice)
+    if(codigo[indice] == "b"):
+        indice+=1
+        return q3(codigo,indice)
+    if(codigo[indice] == "0"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "="):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "("):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "'"):
+        indice+=1
+        return charLiteral(codigo, indice)
+    if(codigo[indice] == '"'):
+        indice+=1
+        return stringLiteral(codigo, indice)
+    if(codigo[indice] == ")"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "c"):
         indice+=1
         return q2(codigo,indice)
     return False
@@ -85,34 +94,43 @@ def q1(codigo, indice):
 def q2(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return True
-    if(codigo[indice] == "b"):
-        indice+=1
-        return q5(codigo,indice)
-    if(codigo[indice] == "c"):
-        indice+=1
-        return q1(codigo,indice)
-    if(codigo[indice] == "("):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "="):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "0"):
-        indice+=1
-        return q0(codigo,indice)
     if(codigo[indice] == "2"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == ")"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "1"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "a"):
+        indice+=1
+        return q1(codigo,indice)
+    if(codigo[indice] == "b"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "0"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "="):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "("):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "l"):
+        indice+=1
+        return q5(codigo,indice)
+    if(codigo[indice] == "'"):
+        indice+=1
+        return charLiteral(codigo, indice)
+    if(codigo[indice] == '"'):
+        indice+=1
+        return stringLiteral(codigo, indice)
+    if(codigo[indice] == ")"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "c"):
         indice+=1
         return q2(codigo,indice)
     return False
@@ -120,21 +138,54 @@ def q2(codigo, indice):
 def q3(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
-        return False
-    if(codigo[indice] == "a"):
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return True
+    if(codigo[indice] == "2"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "1"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "s"):
         indice+=1
         return q4(codigo,indice)
+    if(codigo[indice] == "a"):
+        indice+=1
+        return q1(codigo,indice)
+    if(codigo[indice] == "b"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "0"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "="):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "("):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "'"):
+        indice+=1
+        return charLiteral(codigo, indice)
+    if(codigo[indice] == '"'):
+        indice+=1
+        return stringLiteral(codigo, indice)
+    if(codigo[indice] == ")"):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "c"):
+        indice+=1
+        return q2(codigo,indice)
     return False
 
 def q4(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return False
-    if(codigo[indice] == "s"):
+    if(codigo[indice] == "t"):
         indice+=1
         return q7(codigo,indice)
     return False
@@ -142,90 +193,63 @@ def q4(codigo, indice):
 def q5(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
-        return True
-    if(codigo[indice] == "b"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "c"):
-        indice+=1
-        return q1(codigo,indice)
-    if(codigo[indice] == "("):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "s"):
-        indice+=1
-        return q6(codigo,indice)
-    if(codigo[indice] == "="):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "0"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "2"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == ")"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "1"):
-        indice+=1
-        return q0(codigo,indice)
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return False
     if(codigo[indice] == "a"):
         indice+=1
-        return q2(codigo,indice)
+        return q6(codigo,indice)
     return False
 
 def q6(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return False
-    if(codigo[indice] == "t"):
+    if(codigo[indice] == "s"):
         indice+=1
-        return q8(codigo,indice)
+        return q9(codigo,indice)
     return False
 
 def q7(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return False
-    if(codigo[indice] == "s"):
+    if(codigo[indice] == "r"):
         indice+=1
-        return q0(codigo,indice)
+        return q8(codigo,indice)
     return False
 
 def q8(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
-        return False
-    if(codigo[indice] == "r"):
-        indice+=1
-        return q9(codigo,indice)
-    return False
-
-def q9(codigo, indice):
-    if(indice == len(codigo)):
-        palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return False
     if(codigo[indice] == "a"):
         indice+=1
         return q10(codigo,indice)
     return False
 
+def q9(codigo, indice):
+    if(indice == len(codigo)):
+        palavra = codigo[0:indice]
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return False
+    if(codigo[indice] == "s"):
+        indice+=1
+        return q0(codigo,indice)
+    return False
+
 def q10(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return False
     if(codigo[indice] == "c"):
         indice+=1
@@ -235,14 +259,68 @@ def q10(codigo, indice):
 def q11(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
-        linha = tabela.insere(palavra)
-        tokens.append(Token(palavra, linha))
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
         return False
     if(codigo[indice] == "t"):
         indice+=1
         return q0(codigo,indice)
     return False
 
+def charLiteral(codigo, indice):
+    if(len(codigo) == 4):
+        if(codigo[1] != '\\'):
+            return False
+        if(codigo[3] != "'"):
+            return False
+        if(codigo[2] == '"' or
+           codigo[2] == "'" or
+           codigo[2] == 'f'or
+           codigo[2] == 'b' or
+           codigo[2] == 't' or
+           codigo[2] == 'r' or
+           codigo[2] == 'n' or
+           codigo[2] == '\\'):
+            palavra = codigo[0:4]
+            linha = TABELA.insere(palavra)
+            TOKENS.append(Token(palavra, linha))
+            return True
+    if(len(codigo) == 3):
+        if(codigo[2] != "'"):
+            return False
+        if(codigo[1] == '\\' or codigo[1] == "'"):
+            return False
+        palavra = codigo[0:3]
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return True
+    return False
+
+
+def stringLiteral(codigo, indice):
+    while(indice < len(codigo) - 1):
+        if(codigo[indice] == '\\'):
+            if(codigo[indice+1] == "'" or
+               codigo[indice+1] == '"' or
+               codigo[indice+1] == 'f'or
+               codigo[indice+1] == 'b' or
+               codigo[indice+1] == 't' or
+               codigo[indice+1] == 'r' or
+               codigo[indice+1] == 'n' or
+               codigo[indice+1] == '\\'):
+                indice += 1
+
+            else:
+                return False
+        indice+=1
+
+    if(codigo[indice] != '"'):
+         return False
+    else:
+        palavra = codigo[0:indice+1]
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return True
 def preProcessamento(linhas):
     dicBinarios = {
         "+=" : "+=",
@@ -252,7 +330,7 @@ def preProcessamento(linhas):
         "<=" : "<=",
         "--" : "--"
     }
-    
+
     dicUnarios = {
         "=" : "=",
         ">" : ">",
@@ -286,16 +364,16 @@ def preProcessamento(linhas):
                     nova.append(" ")
                     nova.append(linhas[i][j])
                     nova.append(" ")
-                elif(linhas[i][j] == "	"):
+                elif(linhas[i][j] == "  "):
                     nova.append(" ")
                 else:
                     nova.append(linhas[i][j])
-                    
+
             elif(linhas[i][j] in dicUnarios):
                 nova.append(" ")
                 nova.append(linhas[i][j])
                 nova.append(" ")
-            elif(linhas[i][j] == "	"):
+            elif(linhas[i][j] == "  "):
                 nova.append(" ")
             else:
                 nova.append(linhas[i][j])
@@ -312,7 +390,7 @@ def main(args):
     print(linhas)
     for lin in range(len(linhas)):
         linhas[lin] = linhas[lin].split(' ')
-        print(lin)
+        print(linhas[lin])
         cont = 0
         for item in range(len(linhas[lin])):
             if(linhas[lin][item] != ''):
@@ -321,6 +399,6 @@ def main(args):
                 cont += len(linhas[lin][item])
             else:
                 cont += 1
-    for item in tokens:
+    for item in TOKENS:
         print(item)
 main(sys.argv)

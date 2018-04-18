@@ -18,7 +18,7 @@ class TipoToken(Enum):
     OpSoma = auto.get()
     OpSomaAtribuicao = auto.get()
     OpMultiplicacao = auto.get()
-    
+
     SepVirgula = auto.get()
     SepPonto = auto.get()
     SepAbreColchetes = auto.get()
@@ -28,7 +28,7 @@ class TipoToken(Enum):
     SepAbreParenteses = auto.get()
     SepFechaParenteses = auto.get()
     SepPontoVirgula = auto.get()
-    
+
     PCAbstract = auto.get()
     PCBoolean = auto.get()
     PCChar = auto.get()
@@ -53,11 +53,11 @@ class TipoToken(Enum):
     PCTrue = auto.get()
     PCVoid = auto.get()
     PCWhile = auto.get()
-    
+
     IntLiteral = auto.get()
     CharLiteral = auto.get()
     StringLiteral = auto.get()
-    
+
     Identificador = auto.get()
 
 class Gerenciador:
@@ -75,7 +75,7 @@ class Gerenciador:
         "-" : TipoToken.OpMenos,
         "*" : TipoToken.OpMultiplicacao,
     }
-    
+
     separadores = {
         "," : TipoToken.SepVirgula,
         "." : TipoToken.SepPonto,
@@ -87,7 +87,7 @@ class Gerenciador:
         ")" : TipoToken.SepFechaParenteses,
         ";" : TipoToken.SepPontoVirgula
     }
-    
+
     palavrasChaves = {
         "abstract" : TipoToken.PCAbstract,
         "boolean" : TipoToken.PCBoolean,
@@ -113,10 +113,10 @@ class Gerenciador:
         "true" : TipoToken.PCTrue,
         "void" : TipoToken.PCVoid,
         "while" : TipoToken.PCWhile
-    
+
     }
-    
-    
+
+
     def getTipoToken(self, palavra):
         if(palavra in self.operadores):
             return self.operadores[palavra]
@@ -126,4 +126,8 @@ class Gerenciador:
             return self.palavrasChaves[palavra]
         if(palavra.isdigit()):
             return TipoToken.IntLiteral
-            
+        if(palavra[0] == "'" and palavra[len(palavra) - 1] == "'"):
+            return TipoToken.CharLiteral
+        if(palavra[0] == '"' and palavra[len(palavra) - 1] == '"'):
+            return TipoToken.StringLiteral
+

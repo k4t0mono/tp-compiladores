@@ -7,5 +7,5 @@ parenteses1 = (
 parenteses2 = )
 igual = =
 {
-    (s.e | e.n.t.a.o | s.e.n.a.o | parenteses1 | parenteses2 | letras | igual.igual | igual)*
+    (igual.igual | igual)*
 }

@@ -8,7 +8,7 @@ def q0(codigo, indice):
         palavra = codigo[0:indice]
         print("token: " + palavra)
         return True
-    if(codigo[indice] == "b"):
+    if(codigo[indice] == "a"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == ")"):
@@ -17,19 +17,19 @@ def q0(codigo, indice):
     if(codigo[indice] == "e"):
         indice+=1
         return q1(codigo,indice)
+    if(codigo[indice] == "("):
+        indice+=1
+        return q0(codigo,indice)
     if(codigo[indice] == "="):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "c"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "s"):
         indice+=1
         return q2(codigo,indice)
-    if(codigo[indice] == "a"):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "("):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "c"):
+    if(codigo[indice] == "b"):
         indice+=1
         return q0(codigo,indice)
     return False
@@ -41,7 +41,7 @@ def q1(codigo, indice):
         return False
     if(codigo[indice] == "n"):
         indice+=1
-        return q4(codigo,indice)
+        return q3(codigo,indice)
     return False
 
 def q2(codigo, indice):
@@ -51,18 +51,35 @@ def q2(codigo, indice):
         return False
     if(codigo[indice] == "e"):
         indice+=1
-        return q3(codigo,indice)
+        return q5(codigo,indice)
     return False
 
 def q3(codigo, indice):
     if(indice == len(codigo)):
         palavra = codigo[0:indice]
         print("token: " + palavra)
-        return True
-    if(codigo[indice] == "n"):
+        return False
+    if(codigo[indice] == "t"):
         indice+=1
-        return q5(codigo,indice)
-    if(codigo[indice] == "b"):
+        return q4(codigo,indice)
+    return False
+
+def q4(codigo, indice):
+    if(indice == len(codigo)):
+        palavra = codigo[0:indice]
+        print("token: " + palavra)
+        return False
+    if(codigo[indice] == "a"):
+        indice+=1
+        return q6(codigo,indice)
+    return False
+
+def q5(codigo, indice):
+    if(indice == len(codigo)):
+        palavra = codigo[0:indice]
+        print("token: " + palavra)
+        return True
+    if(codigo[indice] == "a"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == ")"):
@@ -71,41 +88,24 @@ def q3(codigo, indice):
     if(codigo[indice] == "e"):
         indice+=1
         return q1(codigo,indice)
+    if(codigo[indice] == "("):
+        indice+=1
+        return q0(codigo,indice)
     if(codigo[indice] == "="):
+        indice+=1
+        return q0(codigo,indice)
+    if(codigo[indice] == "n"):
+        indice+=1
+        return q4(codigo,indice)
+    if(codigo[indice] == "c"):
         indice+=1
         return q0(codigo,indice)
     if(codigo[indice] == "s"):
         indice+=1
         return q2(codigo,indice)
-    if(codigo[indice] == "a"):
+    if(codigo[indice] == "b"):
         indice+=1
         return q0(codigo,indice)
-    if(codigo[indice] == "("):
-        indice+=1
-        return q0(codigo,indice)
-    if(codigo[indice] == "c"):
-        indice+=1
-        return q0(codigo,indice)
-    return False
-
-def q4(codigo, indice):
-    if(indice == len(codigo)):
-        palavra = codigo[0:indice]
-        print("token: " + palavra)
-        return False
-    if(codigo[indice] == "t"):
-        indice+=1
-        return q5(codigo,indice)
-    return False
-
-def q5(codigo, indice):
-    if(indice == len(codigo)):
-        palavra = codigo[0:indice]
-        print("token: " + palavra)
-        return False
-    if(codigo[indice] == "a"):
-        indice+=1
-        return q6(codigo,indice)
     return False
 
 def q6(codigo, indice):

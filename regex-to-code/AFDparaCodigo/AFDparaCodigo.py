@@ -19,10 +19,8 @@ class GeradorDeCodigo:
                                  '        return q$estadoDestino(codigo,indice)\n')
                                  
     condicaoFinal = Template('    if(indice == len(codigo)):\n' +\
-                             '        palavra = codigo[0:indice]\n' +\
-                             '        print("token: " + palavra)\n' +\
-                             '        return $booleano\n')
-    cabecalho = "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nimport sys\n\n"
+                             '        return $retorno\n')
+    cabecalho = "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nimport sys\n\n" + "from Token import Token\n\n"
     mainPrograma = Template("def main(args):\n" +\
                             "    arquivo = open(args[1], 'r')\n" +\
                             "    linhas = arquivo.read().splitlines()\n" +\
@@ -35,7 +33,7 @@ class GeradorDeCodigo:
                             "        for item in range(len(linhas[lin])):\n" +\
                             "            if(linhas[lin][item] != ''):\n" +\
                             "                if(not q$estadoInicial(linhas[lin][item], 0)):\n" +\
-                            "                    print('ERRO: ' + str(lin + 1) + ' ' + str(cont + 1))\n" +\
+                            "                    print('Erro na linha ' + str(lin + 1) + ' e coluna ' + str(cont + 1))\n" +\
                             "                cont += len(linhas[lin][item])\n" +\
                             "            else:\n" +\
                             "                cont += 1\n" +\
@@ -118,9 +116,9 @@ class GeradorDeCodigo:
             return ""
         resultado = self.definicaoClasse.substitute(nomeEstado = estado.idEstado)
         if estado.final:
-            resultado += self.condicaoFinal.substitute(booleano = 'True')
+            resultado += self.condicaoFinal.substitute(retorno = 'Token(codigo[0:indice])')
         else:
-            resultado += self.condicaoFinal.substitute(booleano = 'False')
+            resultado += self.condicaoFinal.substitute(retorno = 'False')
         for transicao in estado.transicoes:
             if(transicao.letra == "␣"):
                 transicao.letra = " "

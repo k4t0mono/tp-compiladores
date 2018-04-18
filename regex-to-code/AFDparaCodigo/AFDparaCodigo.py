@@ -92,7 +92,7 @@ class GeradorDeCodigo:
                        '                    nova.append(" ")\n' +\
                        '                    nova.append(linhas[i][j])\n' +\
                        '                    nova.append(" ")\n' +\
-                       '                elif(linhas[i][j] == "\t"):\n' +\
+                       '                elif(linhas[i][j] == "\\t"):\n' +\
                        '                    nova.append(" ")\n' +\
                        '                else:\n' +\
                        '                    nova.append(linhas[i][j])\n' +\
@@ -101,7 +101,7 @@ class GeradorDeCodigo:
                        '                nova.append(" ")\n' +\
                        '                nova.append(linhas[i][j])\n' +\
                        '                nova.append(" ")\n' +\
-                       '            elif(linhas[i][j] == "\t"):\n' +\
+                       '            elif(linhas[i][j] == "\\t"):\n' +\
                        '                nova.append(" ")\n' +\
                        '            else:\n' +\
                        '                nova.append(linhas[i][j])\n' +\

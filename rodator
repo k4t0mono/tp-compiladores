@@ -1,5 +1,5 @@
 abstract class ab1
-    (a  = 1)
+	*(a  = 1)
     b = 2
 a = '\n'
-b = "asddfkij\'md  aslkd\""
+b = 'asddfkij\'md  aslkd\''

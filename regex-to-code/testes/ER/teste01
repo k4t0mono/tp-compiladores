@@ -1,4 +1,4 @@
-:s,e,n,t,a,o,[0-4],[a-d],(,), =
+:[a-z], [0-9], =, ), (
 numeros = [0-2]
 letras = [a-c]
 traco = '-'
@@ -7,5 +7,5 @@ parenteses1 = (
 parenteses2 = )
 igual = =
 {
-    (igual.igual | igual)*
+	(a.b.s.t.r.a.c.t | c.l.a.s.s | letras.(letras | numeros)* | 		igual | parenteses1 | parenteses2 | numeros)*
 }

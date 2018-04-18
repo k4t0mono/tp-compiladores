@@ -16,7 +16,10 @@ class TabelaDeSimbolos:
         
     def insere(self, palavra):
         g = Gerenciador()
-        if(g.getTipoToken(palavra) != TipoToken.Identificador):
+        if(g.getTipoToken(palavra) != TipoToken.Identificador and
+           g.getTipoToken(palavra) != TipoToken.IntLiteral and
+           g.getTipoToken(palavra) != TipoToken.CharLiteral and
+           g.getTipoToken(palavra) != TipoToken.StringLiteral):
             return -1
         item = Item(palavra)
         self.tabela.append(item)

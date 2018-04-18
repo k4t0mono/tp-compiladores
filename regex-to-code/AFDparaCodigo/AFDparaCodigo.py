@@ -19,8 +19,17 @@ class GeradorDeCodigo:
                                  '        return q$estadoDestino(codigo,indice)\n')
                                  
     condicaoFinal = Template('    if(indice == len(codigo)):\n' +\
+                             '        palavra = codigo[0:indice]\n' +\
+                             '        linha = tabela.insere(palavra)\n' +\
+                             '        tokens.append(Token(palavra, linha))\n' +\
                              '        return $retorno\n')
-    cabecalho = "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nimport sys\n\n" + "from Token import Token\n\n"
+    cabecalho = "#!/usr/bin/env python3\n" +\
+                "# -*- coding: utf-8 -*-\n\n" +\
+                "import sys\n\n" +\
+                "from Token import Token\n" +\
+                "from TabelaDeSimbolos import TabelaDeSimbolos\n\n" +\
+                "tabela = TabelaDeSimbolos()\n" +\
+                "tokens = []\n\n"
     mainPrograma = Template("def main(args):\n" +\
                             "    arquivo = open(args[1], 'r')\n" +\
                             "    linhas = arquivo.read().splitlines()\n" +\
@@ -37,6 +46,8 @@ class GeradorDeCodigo:
                             "                cont += len(linhas[lin][item])\n" +\
                             "            else:\n" +\
                             "                cont += 1\n" +\
+                            "    for item in tokens:\n" +\
+                            "        print(item)\n" +\
                             "main(sys.argv)\n")
     preProcessamento = 'def preProcessamento(linhas):\n' +\
                        '    dicBinarios = {\n' +\
@@ -116,7 +127,7 @@ class GeradorDeCodigo:
             return ""
         resultado = self.definicaoClasse.substitute(nomeEstado = estado.idEstado)
         if estado.final:
-            resultado += self.condicaoFinal.substitute(retorno = 'Token(codigo[0:indice])')
+            resultado += self.condicaoFinal.substitute(retorno = 'True')
         else:
             resultado += self.condicaoFinal.substitute(retorno = 'False')
         for transicao in estado.transicoes:

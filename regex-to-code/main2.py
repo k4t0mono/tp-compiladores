@@ -5,7 +5,7 @@ import sys
 sys.setrecursionlimit(100000000)
 
 from ERparaAFND.ERparaAFND import ERparaAFND
-from desenhaGrafo.desenhaGrafo import desenhaGrafo
+#from desenhaGrafo.desenhaGrafo import desenhaGrafo
 from AFNDparaAFD.AFNDparaAFD import AFNDparaAFD
 from MinimizaAuto.minimiza_auto import minimiza_auto
 from AFDparaCodigo.AFDparaCodigo import AFDparaCodigo

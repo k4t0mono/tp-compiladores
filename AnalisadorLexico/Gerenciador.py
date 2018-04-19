@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from enum import Enum
-from Auto import Auto
+from AnalisadorLexico.Auto import Auto
 
 class TipoToken(Enum):
     auto = Auto()
@@ -131,4 +131,3 @@ class Gerenciador:
         if(palavra[0] == '"' and palavra[len(palavra) - 1] == '"'):
             return TipoToken.StringLiteral
         return TipoToken.Identificador
-

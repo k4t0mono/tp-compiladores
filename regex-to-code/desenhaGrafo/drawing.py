@@ -45,7 +45,7 @@ def juntaTransicoes(trans):
         else:
             for j in li:
                 _j = list(t[t.index(j)])
-                aux = i[i]
+                aux = i[1]
                 if(i[1] == "virg"):
                     aux = ","
                 _j[1] = t[t.index(j)][1] + "  " + aux

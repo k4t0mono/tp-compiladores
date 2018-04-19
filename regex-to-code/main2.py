@@ -5,7 +5,7 @@ import sys
 sys.setrecursionlimit(100000000)
 
 from ERparaAFND.ERparaAFND import ERparaAFND
-#from desenhaGrafo.desenhaGrafo import desenhaGrafo
+from desenhaGrafo.desenhaGrafo import desenhaGrafo
 from AFNDparaAFD.AFNDparaAFD import AFNDparaAFD
 from MinimizaAuto.minimiza_auto import minimiza_auto
 from AFDparaCodigo.AFDparaCodigo import AFDparaCodigo
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     #print("EU DESENHO THUZA")
     #argsAFND = ["testes/AFND/arquivos/" + sys.argv[2] + "-AFND", "testes/AFD/NaoMinimizado/arquivos/" + sys.argv[2] + "-AFD"]
     #AFNDparaAFD(argsAFND)
-    #print("EU SIL") 
+    #print("EU SIL")
     #argsDesenha2 = ["testes/AFD/NaoMinimizado/arquivos/" + sys.argv[2] + "-AFD", "testes/AFD/NaoMinimizado/grafos/" + sys.argv[2] + "-grafo"]
     #desenhaGrafo(argsDesenha2)
     #print("EU DESENHO SILSIL")
@@ -27,9 +27,8 @@ if __name__ == '__main__':
     #Minimiza(argsMin)
     #print("EU BRENEX")
     argsDesenha3 = ["testes/AFD/Minimizado/arquivos/" + sys.argv[2] + "-min", "../" + sys.argv[2] + "-grafo"]
-    #desenhaGrafo(argsDesenha3)
+    desenhaGrafo(argsDesenha3)
     print("EU DESENHO BRENEX")
     argGeraCodigo = ["testes/AFD/Minimizado/arquivos/" + sys.argv[2] + "-min", "../" + sys.argv[2] + ".py"]
     AFDparaCodigo(argGeraCodigo)
     print("EU JOBEL")
-    

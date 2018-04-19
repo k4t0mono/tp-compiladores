@@ -14,17 +14,17 @@ digraph "graph" {
 	q6
 	q8
 	start -> q0
-	q0 -> q1 [label="4, 7, 0, 3, 6, 1, 9, 8, 5, 2"]
-	q0 -> q2 [label="(, }, virg, ), !, 'anything', >, ], {, *, [, ;"]
-	q0 -> q3 [label="q, x, h, j, R, y, r, t, J, U, I, V, K, e, C, _, n, i, F, c, B, Y, a, w, G, X, s, z, b, o, D, M, E, g, S, H, m, p, A, v, d, f, Q, $, k, u, O, L, W, P, N, Z, T, l"]
+	q0 -> q1 [label="4  7  3  6  1  9  8  5  2"]
+	q0 -> q2 [label="(  }  0  ,  )  !  'anything'  \"anything\"  >  ]  {  *  [  ;"]
+	q0 -> q3 [label="q  x  h  j  R  y  r  t  J  U  I  V  K  e  C  _  n  i  F  c  B  Y  a  w  G  X  s  z  b  o  D  M  E  g  S  H  m  p  A  v  d  f  Q  $  k  u  O  L  W  P  N  Z  T  l"]
 	q0 -> q4 [label="+"]
 	q0 -> q5 [label="="]
 	q0 -> q6 [label="<"]
 	q0 -> q7 [label="-"]
 	q0 -> q8 [label="&"]
-	q1 -> q1 [label="4, 7, 0, 3, 6, 1, 9, 8, 5, 2"]
-	q3 -> q3 [label="4, q, x, h, j, 7, 0, R, y, r, t, J, U, I, V, K, e, C, 3, 6, _, n, i, 1, 9, F, c, B, Y, a, w, G, X, s, z, b, o, D, M, E, 8, g, S, H, m, p, A, v, d, f, Q, $, k, u, O, 5, L, W, P, N, Z, T, 2, l"]
-	q4 -> q2 [label="+, ="]
+	q1 -> q1 [label="4  7  0  3  6  1  9  8  5  2"]
+	q3 -> q3 [label="4  q  x  h  j  7  0  R  y  r  t  J  U  I  V  K  e  C  3  6  _  n  i  1  9  F  c  B  Y  a  w  G  X  s  z  b  o  D  M  E  8  g  S  H  m  p  A  v  d  f  Q  $  k  u  O  5  L  W  P  N  Z  T  2  l"]
+	q4 -> q2 [label="+  ="]
 	q5 -> q2 [label="="]
 	q6 -> q2 [label="="]
 	q7 -> q2 [label="-"]

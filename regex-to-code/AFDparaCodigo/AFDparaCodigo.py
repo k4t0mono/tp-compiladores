@@ -278,6 +278,8 @@ def stringLiteral(codigo, indice):
         for transicao in estado.transicoes:
             if(transicao.letra == "␣"):
                 transicao.letra = " "
+            if(transicao.letra == "virg"):
+                transicao.letra = ","
             if(transicao.letra == "'anything'"):
                 resultado += '    if(codigo[indice] == "\'"):\n' +\
                              '        indice+=1\n' +\

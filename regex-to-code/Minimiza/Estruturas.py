@@ -231,6 +231,7 @@ class Tabela:
         #adiciona, ao estado, os estados iguais a ele
         for par in self.pares:
             if(par.valido):
+                print("PAR VALIDO")
                 par.e1.equivalentes.append(par.e2)
                 par.e2.equivalentes.append(par.e1)
                 

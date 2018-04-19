@@ -1,8 +1,8 @@
-:[a-z], [0-9], [A-Z],=,>,+,&,<,!,-,*,[,],{,},(,),.,;
+:[a-z], [0-9], [A-Z],=,>,+,&,<,!,-,*,[,],{,},(,),.,;,$,_, 'anything', virg
 
-letrasMin = [a-c]
-letrasMai = [A-C]
-numeros = [0-2]
+letrasMin = [a-z]
+letrasMai = [A-Z]
+numeros = [0-9]
 igual = =
 maior = >
 mais = +
@@ -11,7 +11,6 @@ menor = <
 not = !
 menos = -
 mult = *
-virg = ,
 pont = .
 abreColche = [
 abreChave = {
@@ -20,13 +19,16 @@ fechaPar = )
 fechaCahve = }
 fechaColche = ]
 pontVirg = ;
-
-
+cifrao = $
+underline = _
+zero = 0
 {
-	a.b.s.t.r.a.c.t|b.o.o.l.e.a.n|c.h.a.r|c.l.a.s.s|e.l.s.e|e.x.t.e.n.d.s|f.a.l.s.e|
-	i.m.p.o.r.t|i.f|i.n.s.t.a.n.c.e.o.f|i.n.t|n.e.w|n.u.l.l|p.a.c.k.a.g.e|p.r.i.v.a.t.e|
-	p.r.o.t.e.c.t.e.d|p.u.b.l.i.c|r.e.t.u.r.n|s.t.a.t.i.c|s.u.p.e.r|t.h.i.s|t.r.u.e|v.o.i.d|
-	w.h.i.l.e|igual.igual| igual | maior | mais.mais | and.and | menor.igual | not | menos |
-	menos.menos | mais | mais.igual | mult | abreColche |abreChave| abrePar| fechaPar|
-	fechaCahve| fechaColche| pontVirg
+    a.b.s.t.r.a.c.t|b.o.o.l.e.a.n|c.h.a.r|c.l.a.s.s|e.l.s.e|e.x.t.e.n.d.s|f.a.l.s.e|
+    i.m.p.o.r.t|i.f|i.n.s.t.a.n.c.e.o.f|i.n.t|n.e.w|n.u.l.l|p.a.c.k.a.g.e|p.r.i.v.a.t.e|
+    p.r.o.t.e.c.t.e.d|p.u.b.l.i.c|r.e.t.u.r.n|s.t.a.t.i.c|s.u.p.e.r|t.h.i.s|t.r.u.e|v.o.i.d|
+    w.h.i.l.e|igual.igual| igual | maior | mais.mais | and.and | menor.igual | not | menos |
+    menos.menos | mais | mais.igual | mult | abreColche |abreChave| abrePar| fechaPar|
+    fechaCahve| fechaColche| virg | pontVirg |
+    (letrasMin|letrasMai|cifrao|underline).(letrasMin|letrasMai|numeros|cifrao|underline)* |
+    (zero | numeros+) | 'anything' | "anything"
 }

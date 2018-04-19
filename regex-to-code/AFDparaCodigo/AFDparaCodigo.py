@@ -14,155 +14,241 @@ class GeradorDeCodigo:
 
     definicaoClasse = Template('def q$nomeEstado(codigo, indice):\n')
 
-    condicaoCaractere = Template('    if(codigo[indice] == "$letraTransicao"):\n' +\
-                                 '        indice+=1\n' +\
-                                 '        return q$estadoDestino(codigo,indice)\n')
-
-    condicaoFinal = Template('    if(indice == len(codigo)):\n' +\
-                             '        palavra = codigo[0:indice]\n' +\
-                             '        linha = TABELA.insere(palavra)\n' +\
-                             '        TOKENS.append(Token(palavra, linha))\n' +\
-                             '        return $retorno\n')
-    cabecalho = "#!/usr/bin/env python3\n" +\
-                "# -*- coding: utf-8 -*-\n\n" +\
-                "import sys\n\n" +\
-                "from Token import Token\n" +\
-                "from TabelaDeSimbolos import TabelaDeSimbolos\n\n" +\
-                "TABELA = TabelaDeSimbolos()\n" +\
-                "TOKENS = []\n\n"
-    mainPrograma = Template("def main(args):\n" +\
-                            "    arquivo = open(args[1], 'r')\n" +\
-                            "    linhas = arquivo.read().splitlines()\n" +\
-                            "    linhas = preProcessamento(linhas)\n" +\
-                            "    print(linhas)\n" +\
-                            "    for lin in range(len(linhas)):\n" +\
-                            "        linhas[lin] = linhas[lin].split(' ')\n" +\
-                            "        print(lin)\n" +\
-                            "        cont = 0\n" +\
-                            "        for item in range(len(linhas[lin])):\n" +\
-                            "            if(linhas[lin][item] != ''):\n" +\
-                            "                if(not q$estadoInicial(linhas[lin][item], 0)):\n" +\
-                            "                    print('Erro na linha ' + str(lin + 1) + ' e coluna ' + str(cont + 1))\n" +\
-                            "                cont += len(linhas[lin][item])\n" +\
-                            "            else:\n" +\
-                            "                cont += 1\n" +\
-                            "    for item in TOKENS:\n" +\
-                            "        print(item)\n" +\
-                            "main(sys.argv)\n")
-    preProcessamento = 'def preProcessamento(linhas):\n' +\
-                       '    dicBinarios = {\n' +\
-                       '        "+=" : "+=",\n' +\
-                       '        "==" : "==",\n' +\
-                       '        "++" : "++",\n' +\
-                       '        "&&" : "&&",\n' +\
-                       '        "<=" : "<=",\n' +\
-                       '        "--" : "--"\n' +\
-                       '    }\n' +\
-                       '    \n' +\
-                       '    dicUnarios = {\n' +\
-                       '        "=" : "=",\n' +\
-                       '        ">" : ">",\n' +\
-                       '        "+" : "+",\n' +\
-                       '        "!" : "!",\n' +\
-                       '        "-" : "-",\n' +\
-                       '        "*" : "*",\n' +\
-                       '        "," : ",",\n' +\
-                       '        "." : ".",\n' +\
-                       '        "[" : "[",\n' +\
-                       '        "{" : "{",\n' +\
-                       '        "(" : "(",\n' +\
-                       '        ")" : ")",\n' +\
-                       '        "}" : "}",\n' +\
-                       '        "]" : "]",\n' +\
-                       '        ";" : ";"\n' +\
-                       '    }\n' +\
-                       '    for i in range(len(linhas)):\n' +\
-                       '        nova = []\n' +\
-                       '        j = 0\n' +\
-                       '        while(j < len(linhas[i])):\n' +\
-                       '            if(j < (len(linhas[i]) - 1)):\n' +\
-                       '                teste = linhas[i][j:j + 2]\n' +\
-                       '                if(teste in dicBinarios):\n' +\
-                       '                    nova.append(" ")\n' +\
-                       '                    nova.append(linhas[i][j])\n' +\
-                       '                    nova.append(linhas[i][j + 1])\n' +\
-                       '                    nova.append(" ")\n' +\
-                       '                    j += 1\n' +\
-                       '                elif(linhas[i][j] in dicUnarios):\n' +\
-                       '                    nova.append(" ")\n' +\
-                       '                    nova.append(linhas[i][j])\n' +\
-                       '                    nova.append(" ")\n' +\
-                       '                elif(linhas[i][j] == "\\t"):\n' +\
-                       '                    nova.append(" ")\n' +\
-                       '                else:\n' +\
-                       '                    nova.append(linhas[i][j])\n' +\
-                       '                    \n' +\
-                       '            elif(linhas[i][j] in dicUnarios):\n' +\
-                       '                nova.append(" ")\n' +\
-                       '                nova.append(linhas[i][j])\n' +\
-                       '                nova.append(" ")\n' +\
-                       '            elif(linhas[i][j] == "\\t"):\n' +\
-                       '                nova.append(" ")\n' +\
-                       '            else:\n' +\
-                       '                nova.append(linhas[i][j])\n' +\
-                       '                j += 1\n' +\
-                       '            j += 1\n'  +\
-                       '        linhas[i] = "".join(nova)\n\n'  +\
-                       '    return linhas\n\n'
-
-    charLiteral = "def charLiteral(codigo, indice):\n" +\
-                  "    if(len(codigo) == 4):\n" +\
-                  "        if(codigo[1] != '\\\\'):\n" +\
-                  "            return False\n" +\
-                  "        if(codigo[3] != \"'\"):\n" +\
-                  "            return False\n" +\
-                  "        if(codigo[2] == '\"' or\n" +\
-                  "           codigo[2] == \"'\" or\n" +\
-                  "           codigo[2] == 'f'or\n" +\
-                  "           codigo[2] == 'b' or\n" +\
-                  "           codigo[2] == 't' or\n" +\
-                  "           codigo[2] == 'r' or\n" +\
-                  "           codigo[2] == 'n' or\n" +\
-                  "           codigo[2] == '\\\\'):\n" +\
-                  "            palavra = codigo[0:4]\n" +\
-                  "            linha = TABELA.insere(palavra)\n" +\
-                  "            TOKENS.append(Token(palavra, linha))\n" +\
-                  "            return True\n" +\
-                  "    if(len(codigo) == 3):\n" +\
-                  "        if(codigo[2] != \"'\"):\n" +\
-                  "            return False\n" +\
-                  "        if(codigo[1] == '\\\\' or codigo[1] == \"'\"):\n" +\
-                  "            return False\n" +\
-                  "        palavra = codigo[0:3]\n" +\
-                  "        linha = TABELA.insere(palavra)\n" +\
-                  "        TOKENS.append(Token(palavra, linha))\n" +\
-                  "        return True\n" +\
-                  "    return False\n\n\n"
+    condicaoCaractere = Template(
+"""
+    if(codigo[indice] == "$letraTransicao"):
+        indice+=1
+        return q$estadoDestino(codigo,indice)
+        
+""")
 
 
+    condicaoFinal = Template(
+"""
+    if(indice == len(codigo)):
+        palavra = codigo[0:indice]
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return $retorno
 
-    stringLiteral = "def stringLiteral(codigo, indice):\n" +\
-                  "    while(indice < len(codigo) - 1):\n" +\
-                  "        if(codigo[indice] == '\\\\'):\n" +\
-                  "            if(codigo[indice+1] == \"'\" or\n" +\
-                  "               codigo[indice+1] == '\"' or\n" +\
-                  "               codigo[indice+1] == 'f'or\n" +\
-                  "               codigo[indice+1] == 'b' or\n" +\
-                  "               codigo[indice+1] == 't' or\n" +\
-                  "               codigo[indice+1] == 'r' or\n" +\
-                  "               codigo[indice+1] == 'n' or\n" +\
-                  "               codigo[indice+1] == '\\\\'):\n" +\
-                  "                indice += 1\n\n" +\
-                  "            else: \n" +\
-                  "                return False\n" +\
-                  "        indice+=1\n\n" +\
-                  "    if(codigo[indice] != '\"'):\n" +\
-                  "         return False\n" +\
-                  "    else: \n" +\
-                  "        palavra = codigo[0:indice+1]\n" +\
-                  "        linha = TABELA.insere(palavra)\n" +\
-                  "        TOKENS.append(Token(palavra, linha))\n" +\
-                  "        return True\n"
+""")
+
+
+    cabecalho =''+\
+"""
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import sys
+
+from Token import Token
+from TabelaDeSimbolos import TabelaDeSimbolos
+
+TABELA = TabelaDeSimbolos()
+TOKENS = []
+
+
+"""
+ 
+                
+    mainPrograma = Template(
+"""def main(args):
+    arquivo = open(args[1], 'r')
+    linhas = arquivo.read().splitlines()
+    linhas = preProcessamento(linhas)
+    print(linhas)
+    
+    for lin in range(len(linhas)):
+        print(linhas[lin])
+        cont = 0
+        
+        for item in range(len(linhas[lin])):
+            if(linhas[lin][item] != ''):
+                if(not q$estadoInicial(linhas[lin][item], 0)):
+                    print('Erro na linha ' + str(lin + 1) + ' e coluna ' + str(cont + 1))
+                    
+                cont += len(linhas[lin][item])
+                
+            else:
+                cont += 1
+                
+    for item in TOKENS:
+        print(item)
+
+main(sys.argv)
+
+""")
+    preProcessamento = ''+\
+"""
+def preProcessamento(linhas):
+    dicBinarios = {
+        "+=" : "+=",
+        "==" : "==",
+        "++" : "++",
+        "&&" : "&&",
+        "<=" : "<=",
+        "--" : "--"
+    }
+    
+    dicUnarios = {
+        "=" : "=",
+        ">" : ">",
+        "+" : "+",
+        "!" : "!",
+        "-" : "-",
+        "*" : "*",
+        "," : ",",
+        "." : ".",
+        "[" : "[",
+        "{" : "{",
+        "(" : "(",
+        ")" : ")",
+        "}" : "}",
+        "]" : "]",
+        ";" : ";"
+    }
+    for i in range(len(linhas)):
+        arrayLinha = []
+        j = 0
+        while(j < len(linhas[i]) - 1):
+            teste = linhas[i][j : j + 2]
+            if(teste in dicBinarios):
+                arrayLinha.append(teste)
+                j += 1
+            elif(linhas[i][j] in dicUnarios):
+                arrayLinha.append(linhas[i][j])
+            elif(linhas[i][j] == "\t" or linhas[i][j] == " "):
+                arrayLinha.append('')
+            else:           #faz magica nao mexa
+                palavra = linhas[i][j]
+                k = j + 1
+                aspasSimples = False
+                aspasDuplas = False
+                if(linhas[i][j] == "'"):
+                    aspasSimples = True
+                elif(linhas[i][j] == '"'):
+                    aspasDuplas = True
+                acabou = False
+                if(aspasSimples):
+                    while(k < len(linhas[i]) and (linhas[i][k] != "'" or linhas[i][k - 1] == "\\\\")):
+                        palavra += linhas[i][k]
+                        k += 1
+                    if(k < len(linhas[i])):
+                        palavra += linhas[i][k]
+                    arrayLinha.append(palavra)
+                    j = k
+                
+                elif(aspasDuplas):
+                    while(k < len(linhas[i]) and (linhas[i][k] != '"' or linhas[i][k - 1] == "\\\\")):
+                        palavra += linhas[i][k]
+                        k += 1
+                    if(k < len(linhas[i])):
+                        palavra += linhas[i][k]
+                    arrayLinha.append(palavra)
+                    j = k
+                
+                else:
+                    while(k < (len(linhas[i]) - 1) and not acabou):
+                        teste = linhas[i][k : k + 2]
+                        if(teste in dicBinarios or
+                           linhas[i][k] in dicUnarios or
+                           linhas[i][k] == "\t" or
+                           linhas[i][k] == " "):
+                            arrayLinha.append(palavra)
+                            acabou = True
+                            j = k - 1
+                        else:
+                            palavra += linhas[i][k]
+                            k += 1
+                    if(k == len(linhas[i]) - 1):
+                        if(linhas[i][k] in dicUnarios or
+                           linhas[i][k] == "\t" or
+                           linhas[i][k] == " "):
+                            arrayLinha.append(palavra)
+                            j = k - 1
+                        else:
+                            palavra += linhas[i][k]
+                            arrayLinha.append(palavra)
+                            j = k
+                        
+            j += 1
+        if(j == len(linhas[i]) - 1):
+            if(linhas[i][j] == "\t" or linhas[i][j] == " "):
+                arrayLinha.append('')
+            else:
+                arrayLinha.append(linhas[i][j])
+                
+        linhas[i] = arrayLinha
+        print(arrayLinha)
+        
+    return linhas
+"""
+
+    charLiteral = ''+\
+"""def charLiteral(codigo, indice):
+    if(len(codigo) == 4):
+        if(codigo[1] != '\\\\'):
+            return False
+        if(codigo[3] != \"'\"):
+            return False
+        if(codigo[2] == '\"' or
+           codigo[2] == \"'\" or
+           codigo[2] == 'f'or
+           codigo[2] == 'b' or
+           codigo[2] == 't' or
+           codigo[2] == 'r' or
+           codigo[2] == 'n' or
+           codigo[2] == '\\\\'):
+            palavra = codigo[0:4]
+            linha = TABELA.insere(palavra)
+            TOKENS.append(Token(palavra, linha))
+            return True
+    if(len(codigo) == 3):
+        if(codigo[2] != \"'\"):
+            return False
+        if(codigo[1] == '\\\\' or codigo[1] == \"'\"):
+            return False
+        palavra = codigo[0:3]
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return True
+    return False
+    
+    
+    
+"""
+
+
+    stringLiteral = ''+\
+"""
+def stringLiteral(codigo, indice):
+    while(indice < len(codigo) - 1):
+        if(codigo[indice] == '\\\\'):
+            if(codigo[indice+1] == \"'\" or
+               codigo[indice+1] == '\"' or
+               codigo[indice+1] == 'f'or
+               codigo[indice+1] == 'b' or
+               codigo[indice+1] == 't' or
+               codigo[indice+1] == 'r' or
+               codigo[indice+1] == 'n' or
+               codigo[indice+1] == '\\\\'):
+                indice += 1
+                
+            else: 
+                return False
+                
+        indice+=1
+        
+    if(codigo[indice] != '\"'):
+         return False
+         
+    else: 
+        palavra = codigo[0:indice+1]
+        linha = TABELA.insere(palavra)
+        TOKENS.append(Token(palavra, linha))
+        return True
+
+"""
 
     def __init__(self,automato):
         self.automato = automato

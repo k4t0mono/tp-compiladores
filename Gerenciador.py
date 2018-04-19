@@ -130,4 +130,5 @@ class Gerenciador:
             return TipoToken.CharLiteral
         if(palavra[0] == '"' and palavra[len(palavra) - 1] == '"'):
             return TipoToken.StringLiteral
+        return TipoToken.Identificador
 

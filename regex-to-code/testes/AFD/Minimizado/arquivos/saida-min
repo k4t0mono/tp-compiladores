@@ -47,6 +47,7 @@
 		(q0,o->q3),
 		(q0,D->q3),
 		(q0,'anything'->q2),
+		(q0,"anything"->q2),
 		(q0,M->q3),
 		(q0,E->q3),
 		(q0,8->q1),

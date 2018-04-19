@@ -117,7 +117,7 @@ def preProcessamento(linhas):
                 j += 1
             elif(linhas[i][j] in dicUnarios):
                 arrayLinha.append(linhas[i][j])
-            elif(linhas[i][j] == "\t" or linhas[i][j] == " "):
+            elif(linhas[i][j] == "\\t" or linhas[i][j] == " "):
                 arrayLinha.append('')
             else:           #faz magica nao mexa
                 palavra = linhas[i][j]
@@ -152,7 +152,7 @@ def preProcessamento(linhas):
                         teste = linhas[i][k : k + 2]
                         if(teste in dicBinarios or
                            linhas[i][k] in dicUnarios or
-                           linhas[i][k] == "\t" or
+                           linhas[i][k] == "\\t" or
                            linhas[i][k] == " "):
                             arrayLinha.append(palavra)
                             acabou = True
@@ -162,7 +162,7 @@ def preProcessamento(linhas):
                             k += 1
                     if(k == len(linhas[i]) - 1):
                         if(linhas[i][k] in dicUnarios or
-                           linhas[i][k] == "\t" or
+                           linhas[i][k] == "\\t" or
                            linhas[i][k] == " "):
                             arrayLinha.append(palavra)
                             j = k - 1
@@ -173,7 +173,7 @@ def preProcessamento(linhas):
                         
             j += 1
         if(j == len(linhas[i]) - 1):
-            if(linhas[i][j] == "\t" or linhas[i][j] == " "):
+            if(linhas[i][j] == "\\t" or linhas[i][j] == " "):
                 arrayLinha.append('')
             else:
                 arrayLinha.append(linhas[i][j])

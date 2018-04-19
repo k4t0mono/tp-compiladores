@@ -1,8 +1,9 @@
-:[a-z], [0-9], [A-Z],=,>,+,&,<,!,-,*,[,],{,},(,),.,;,$,_, 'anything', virg
+:[a-z], [0-9], [A-Z],=,>,+,&,<,!,-,*,[,],{,},(,),.,;,$,_, 'anything', virg, "anything"
 
 letrasMin = [a-z]
 letrasMai = [A-Z]
 numeros = [0-9]
+numerosSemZero = [1-9]
 igual = =
 maior = >
 mais = +
@@ -30,5 +31,5 @@ zero = 0
     menos.menos | mais | mais.igual | mult | abreColche |abreChave| abrePar| fechaPar|
     fechaCahve| fechaColche| virg | pontVirg |
     (letrasMin|letrasMai|cifrao|underline).(letrasMin|letrasMai|numeros|cifrao|underline)* |
-    (zero | numeros+) | 'anything' | "anything"
+    (zero | numerosSemZero.numeros+) | 'anything' | "anything"
 }

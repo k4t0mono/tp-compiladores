@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 from AnalisadorLexico import AnalisadorLexico
-
+from texttable import Texttable
 import sys
 
 def main(args):
@@ -15,7 +15,7 @@ def main(args):
     arquivo = open(args[1], 'r')
     linhas = arquivo.read().splitlines()
     linhas = preProcessamento(linhas)
-    print(linhas)
+    #print(linhas)
     resultadoAnaliseLexica = AnalisadorLexico.main(linhas)
 
     tokens = resultadoAnaliseLexica[0]
@@ -25,6 +25,7 @@ def main(args):
 
     imprimeTokens(dadosTokens)
     imprimeErros(errosLexicos)
+    imprimeTabela(tabela)
 
 
 
@@ -38,7 +39,14 @@ def imprimeErros(erros):
         print('Lexema: {:24} Linha: {:3}   Coluna: {:3}   Erro: {}'.format(item[0], item[1],
                                                                                     item[2], item[3]))
 
-
+def imprimeTabela(tabela):
+    linhas = [["Linha", "Lexema"]]
+    for i in range(len(tabela.tabela)):
+        linhas.append([i + 1, tabela.tabela[i].valor])
+    t = Texttable()
+    t.add_rows(linhas)
+    print(t.draw())
+    
 
 
 def preProcessamento(linhas):

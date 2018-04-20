@@ -962,7 +962,7 @@ def stringLiteral(codigo, indice):
 
         indice+=1
 
-    if(codigo[indice] != '"'):
+    if(indice >= len(codigo) or codigo[indice] != '"'):
          return False
 
     else:
@@ -980,9 +980,8 @@ def main(linhas):
                 if(not q0(linhas[lin][item], 0)):
                     ERROS.append((linhas[lin][item], lin + 1, cont + 1, "Sintaxe inválida"))
                 else:
-                    TOKENS_E_DADOS.append(([linhas[lin][item], lin, item, TOKENS[-1].getTipoToken()]))
+                    TOKENS_E_DADOS.append(([linhas[lin][item], lin + 1, cont + 1, TOKENS[-1].getTipoToken()]))
                 cont += len(linhas[lin][item])
-
             else:
                 cont += 1
     return (TOKENS, TABELA, TOKENS_E_DADOS, ERROS)

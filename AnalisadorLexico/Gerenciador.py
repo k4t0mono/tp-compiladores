@@ -6,6 +6,7 @@ from AnalisadorLexico.Auto import Auto
 
 class TipoToken(Enum):
     auto = Auto()
+    
     OpAtribuicao = auto.get()
     OpIgualdade = auto.get()
     OpMaior = auto.get()

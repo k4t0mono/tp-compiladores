@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 
 from AnalisadorLexico import AnalisadorLexico
+from AnalisadorSintatico import AnalisadorSintatico
 from texttable import Texttable
 import sys
 
@@ -27,6 +28,10 @@ def main(args):
     imprimeErros(errosLexicos)
     imprimeTabela(tabela)
     imprimeFluxoDeTokens(tokens)
+
+
+    resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens)
+    print(resultadoAnaliseSintatica)
 
 def imprimeFluxoDeTokens(tokens):
     for item in tokens:

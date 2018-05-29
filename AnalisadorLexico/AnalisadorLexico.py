@@ -4,8 +4,8 @@
 
 import sys
 
-from AnalisadorLexico.Token import Token
-from AnalisadorLexico.TabelaDeSimbolos import TabelaDeSimbolos
+from Token import Token
+from TabelaDeSimbolos import TabelaDeSimbolos
 
 TABELA = TabelaDeSimbolos()
 TOKENS = []

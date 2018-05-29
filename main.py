@@ -23,11 +23,14 @@ def main(args):
     dadosTokens = resultadoAnaliseLexica[2]
     errosLexicos = resultadoAnaliseLexica[3]
 
-    imprimeTokens(dadosTokens)
+    # imprimeTokens(dadosTokens)
     imprimeErros(errosLexicos)
     imprimeTabela(tabela)
+    imprimeFluxoDeTokens(tokens)
 
-
+def imprimeFluxoDeTokens(tokens):
+    for item in tokens:
+        print(item)
 
 def imprimeTokens(dadosTokens):
     for item in dadosTokens:
@@ -46,7 +49,7 @@ def imprimeTabela(tabela):
     t = Texttable()
     t.add_rows(linhas)
     print(t.draw())
-    
+
 
 
 def preProcessamento(linhas):

@@ -179,16 +179,15 @@ def memberDecl(tokens, i):
         if(acabaramOsTokens(tokens, i)):
             print(erroEstouro("Identificador"))
             return i
-        i = qualifiedIdentifier(tokens, i)
     else:
         i = typeOfDeclaration(tokens, i)
         if(acabaramOsTokens(tokens, i)):
             print(erroEstouro("Identificador"))
             return i
-        i = qualifiedIdentifier(tokens, i)
-        if(not acabaramOsTokens(tokens, i)):
-            if(tokens[i].tipoToken != TipoToken.SepAbreParenteses):
-                i -= 1
+        if(tokens[i].tipoToken == TipoToken.Identificador):
+            j = i + 1
+        if(not acabaramOsTokens(tokens, j)):
+            if(tokens[j].tipoToken != TipoToken.SepAbreParenteses):
                 i = variableDeclarators(tokens, i)
                 if(acabaramOsTokens(tokens, i)):
                     print(erroEstouro("SepPontoVirgula"))
@@ -198,6 +197,9 @@ def memberDecl(tokens, i):
                     return i
                 i += 1
                 return i
+
+    if(tokens[i].tipoToken == TipoToken.Identificador):
+        i += 1
     i = formalParamaters(tokens, i)
 
     if(acabaramOsTokens(tokens, i)):
@@ -212,8 +214,44 @@ def memberDecl(tokens, i):
     return i
 
 def formalParamaters(tokens, i):
-    return i + 1
+    return i + 2
+
+
 def block(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepAbreChaves"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepAbreChaves):
+        print(erroTokenInesperado(tokens[i], "SepAbreChaves"))
+        return i
+
+    i += 1
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepFechaChaves"))
+        return i
+
+    if(tokens[i].tipoToken != TipoToken.SepFechaChaves):
+        i = blockStatement(tokens, i)
+
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepFechaChaves"))
+        return i
+
+    i += 1
+    return i
+
+def blockStatement(tokens, i):
+    # j = i + 1
+    # if(not acabaramOsTokens(tokens, j)):
+    #     if(tokens[j].tipoToken == TipoToken.Identificador):
+    #         j = qualifiedIdentifier(tokens, j)
+    #
+    #     if(eUmBasicType(token[j])):
+    #         j = typeOfDeclaration(tokens, j)
+    return i + 1
+
+
+def statement(tokens, i):
     return i + 1
 
 def variableDeclarators(tokens, i):

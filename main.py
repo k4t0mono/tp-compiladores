@@ -25,9 +25,9 @@ def main(args):
     errosLexicos = resultadoAnaliseLexica[3]
 
     # imprimeTokens(dadosTokens)
-    imprimeErros(errosLexicos)
-    imprimeTabela(tabela)
-    imprimeFluxoDeTokens(tokens)
+    # imprimeErros(errosLexicos)
+    # imprimeTabela(tabela)
+    # imprimeFluxoDeTokens(tokens)
 
 
     resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens)

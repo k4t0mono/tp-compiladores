@@ -606,17 +606,56 @@ def equalityExpression(tokens, i):
 
 def relationalExpression(tokens, i):
     i = additiveExpression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    if((tokens[i].tipoToken == TipoToken.OpMaior) or
+       (tokens[i].tipoToken == TipoToken.OpMenorIgual)):
+        i += 1
+        i = additiveExpression(tokens, i)
+        return i
+    if(tokens[i].tipoToken == TipoToken.PCInstanceOf):
+        i += 1
+        i = referenceType(tokens, i)
+        return i
     return i
 
 def additiveExpression(tokens, i):
     i = multiplicativeExpression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    while((tokens[i].tipoToken == TipoToken.OpSoma) or
+          (tokens[i].tipoToken == TipoToken.OpMenos)):
+        i += 1
+        i = multiplicativeExpression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            return i
     return i
 
 def multiplicativeExpression(tokens, i):
     i = unaryExpression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    while(tokens[i].tipoToken == TipoToken.OpMultiplicacao):
+        i += 1
+        i = unaryExpression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            return i
     return i
 
 def unaryExpression(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("expressao unaria"))
+        return i
+
+    if(tokens[i].tipoToken == TipoToken.OpIncremento):
+        i += 1
+        i = unaryExpression(tokens, i)
+        return i
+
+    if(tokens[i].tipoToken == TipoToken.OpMenos):
+        i += 1
+        i = unaryExpression(tokens, i)
+        return i
     i = simpleUnaryExpression(tokens, i)
     return i
 

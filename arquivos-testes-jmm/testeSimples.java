@@ -7,10 +7,10 @@ public private abstract static static protected class arroz extends pao {
     private dd arroz();
     public aaa ola(sac c, lso d) {
         asdasl
-        aaa = {a, b, {a, b, {a}}}, s = {b}, d, v = 1;
-        if (ab)  {
-            while(b) {
-                return a;
+        aaa = {1, 2, {1, 2, {"abcjs"}}}, s = {'b'}, d, v = 1;
+        if (true && 1 && 2 == "s" == 1 == 290 == 1)  {
+            while(false) {
+                return "a";
             }
         }
     }

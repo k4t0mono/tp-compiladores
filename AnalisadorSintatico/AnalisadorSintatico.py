@@ -4,6 +4,7 @@
 
 from Gerenciador import TipoToken
 
+
 def erroEstouro(esperado):
     return "ERRO: estourou o numero de tokens antes do token esperado (" + esperado + ")!"
 
@@ -35,7 +36,20 @@ def eUmBasicType(token):
         return True
     return False
 
-
+def eUmLiteral(token):
+    if(token.tipoToken == TipoToken.IntLiteral):
+        return True
+    if(token.tipoToken == TipoToken.CharLiteral):
+        return True
+    if(token.tipoToken == TipoToken.StringLiteral):
+        return True
+    if(token.tipoToken == TipoToken.PCTrue):
+        return True
+    if(token.tipoToken == TipoToken.PCFalse):
+        return True
+    if(token.tipoToken == TipoToken.PCNull):
+        return True
+    return False
 
 def compilationUnit(tokens, i):
     if(acabaramOsTokens(tokens, i)):
@@ -524,11 +538,108 @@ def referenceType(tokens, i):
         i += 1
     return i
 
+def arguments(tokens, i):
+    print("CHAMOU ARGUMENTS")
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepAbreParenteses"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepAbreParenteses):
+        print(erroTokenInesperado(tokens[i], "SepAbreParenteses"))
+        return i
+    i += 1
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepFechaParenteses"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+        i = expression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepFechaParenteses"))
+            return i
+        while(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
+            i += 1
+            i = expression(tokens, i)
+            if(acabaramOsTokens(tokens, i)):
+                print(erroEstouro("SepFechaParenteses"))
+                return i
+    i += 1
+    return i
+
 def statementExpression(tokens, i):
     i = expression(tokens, i)
     return i
 
 def expression(tokens, i):
+    i = assignmentExpression(tokens, i)
+    return i
+
+def assignmentExpression(tokens, i):
+    i = conditionalAndExpression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    if((tokens[i].tipoToken == TipoToken.OpAtribuicao) or
+       (tokens[i].tipoToken == TipoToken.OpSomaAtribuicao)):
+        i += 1
+        i = assignmentExpression(tokens, i)
+    return i
+
+def conditionalAndExpression(tokens, i):
+    i = equalityExpression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    while(tokens[i].tipoToken == TipoToken.OpAnd):
+        i += 1
+        i = equalityExpression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            return i
+    return i
+
+def equalityExpression(tokens, i):
+    i = relationalExpression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    while(tokens[i].tipoToken == TipoToken.OpIgualdade):
+        i += 1
+        i = relationalExpression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            return i
+    return i
+
+def relationalExpression(tokens, i):
+    i = additiveExpression(tokens, i)
+    return i
+
+def additiveExpression(tokens, i):
+    i = multiplicativeExpression(tokens, i)
+    return i
+
+def multiplicativeExpression(tokens, i):
+    i = unaryExpression(tokens, i)
+    return i
+
+def unaryExpression(tokens, i):
+    i = simpleUnaryExpression(tokens, i)
+    return i
+
+def simpleUnaryExpression(tokens, i):
+    i = postfixExpression(tokens, i)
+    return i
+
+def postfixExpression(tokens, i):
+    i = primary(tokens, i)
+    return i
+
+def primary(tokens, i):
+    i = literal(tokens, i)
+    return i
+
+def literal(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("<valor literal>"))
+        return i
+    if(eUmLiteral(tokens[i])):
+        i += 1
+        return i
+    print(erroTokenInesperado(tokens[i], "valor literal"))
     return i + 1
 
 

@@ -660,11 +660,61 @@ def unaryExpression(tokens, i):
     return i
 
 def simpleUnaryExpression(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("expressao unaria simples"))
+        return i
+    if(tokens[i].tipoToken == TipoToken.OpNot):
+        i += 1
+        i = unaryExpression(tokens, i)
+        return i
+
+    #ESSA PARTE DO CODIGO TA ORRIVEL MAS FODACE
+    if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("basicType ou referenceType"))
+            return i
+        if(eUmBasicType(tokens[i])):
+            j = basicType(tokens, i)
+            if(acabaramOsTokens(tokens, j)):
+                print(erroEstouro("SepFechaParenteses"))
+                return i
+            if(tokens[j].tipoToken == TipoToken.SepAbreColchetes):
+                i = referenceType(tokens, i)
+                if(acabaramOsTokens(tokens, i)):
+                    print(erroEstouro("SepFechaParenteses"))
+                    return i
+                if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+                    print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+                i += 1
+                i = simpleUnaryExpression(tokens, i)
+                return i
+            else:
+                i = j
+                if(acabaramOsTokens(tokens, i)):
+                    print(erroEstouro("SepFechaParenteses"))
+                    return i
+                if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+                    print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+                i += 1
+                i = unaryExpression(tokens, i)
+                return i
+        else:
+            i = referenceType(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepFechaParenteses"))
+            return i
+        if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+            print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+        i += 1
+        i = simpleUnaryExpression(tokens, i)
+        return i
+
     i = postfixExpression(tokens, i)
     return i
 
 def postfixExpression(tokens, i):
-    i = primary(tokens, i)
+    i = primary(tokens, i)        
     return i
 
 def primary(tokens, i):

@@ -89,7 +89,7 @@ def qualifiedIdentifier(tokens, i):
     print(erroTokenInesperado(tokens[i], "Identificador"))
     if(acabaramOsTokens(tokens, i + 1)):
         return i
-    return i + 1
+    return i
 
 def typeDeclaration(tokens, i):
     i = modifiers(tokens, i)
@@ -214,8 +214,49 @@ def memberDecl(tokens, i):
     return i
 
 def formalParamaters(tokens, i):
-    return i + 2
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepAbreParenteses"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepAbreParenteses):
+        print(erroTokenInesperado(tokens[i], "SepAbreParenteses"))
+        return i
 
+    i += 1
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepFechaParenteses"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+        i = formalParamater(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepFechaParenteses"))
+            return i
+        while(tokens[i].tipoToken == TipoToken.SepVirgula):
+            i += 1
+            i = formalParamater(tokens, i)
+            if(acabaramOsTokens(tokens, i)):
+                print(erroEstouro("<token de formalParamater>"))
+                return i
+
+    if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+        print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+        return i
+
+    i += 1
+    return i
+
+def formalParamater(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("<token de type>"))
+        return i
+    i = typeOfDeclaration(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("Identificador"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.Identificador):
+        print(erroTokenInesperado(tokens[i], "Identificador"))
+        return i
+    i += 1
+    return i
 
 def block(tokens, i):
     if(acabaramOsTokens(tokens, i)):

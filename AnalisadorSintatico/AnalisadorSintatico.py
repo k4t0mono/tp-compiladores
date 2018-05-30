@@ -230,8 +230,11 @@ def block(tokens, i):
         print(erroEstouro("SepFechaChaves"))
         return i
 
-    if(tokens[i].tipoToken != TipoToken.SepFechaChaves):
+    while(tokens[i].tipoToken != TipoToken.SepFechaChaves):
         i = blockStatement(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepFechaChaves"))
+            return i
 
     if(acabaramOsTokens(tokens, i)):
         print(erroEstouro("SepFechaChaves"))
@@ -240,21 +243,74 @@ def block(tokens, i):
     i += 1
     return i
 
+#PROVAVELMENTE ESTA BOSTA ESTA MUITO ERRADA DEMAIS
 def blockStatement(tokens, i):
-    # j = i + 1
-    # if(not acabaramOsTokens(tokens, j)):
-    #     if(tokens[j].tipoToken == TipoToken.Identificador):
-    #         j = qualifiedIdentifier(tokens, j)
-    #
-    #     if(eUmBasicType(token[j])):
-    #         j = typeOfDeclaration(tokens, j)
-    return i + 1
-
+    j = i
+    if(not acabaramOsTokens(tokens, j)):
+        entrou = False
+        if(tokens[j].tipoToken == TipoToken.Identificador):
+            k = j
+            j = qualifiedIdentifier(tokens, j)
+            if(tokens[j].tipoToken == TipoToken.SepAbreColchetes):
+                j = typeDeclaration(tokens, k)
+            entrou = True
+        elif(eUmBasicType(tokens[j])):
+            j = typeOfDeclaration(tokens, j)
+            entrou = True
+        if(entrou):
+            i = localVariableDeclarationStatement(tokens, i)
+            return i
+        i = statement(tokens, i)
+    return i
 
 def statement(tokens, i):
     return i + 1
 
+def localVariableDeclarationStatement(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("<token que define um type>"))
+        return i
+    i = typeOfDeclaration(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("<token de variableDeclarators>"))
+        return i
+    i = variableDeclarators(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepPontoVirgula"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
+        print(erroTokenInesperado(tokens[i], "SepPontoVirgula"))
+        return i
+    i += 1
+    return i
+
 def variableDeclarators(tokens, i):
+    i = variableDeclarator(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    while(tokens[i].tipoToken == TipoToken.SepVirgula):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("<token de variableDeclarator>"))
+            return i
+        i = variableDeclarator(tokens, i)
+    return i
+
+def variableDeclarator(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("Identificador"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.Identificador):
+        print(erroTokenInesperado(tokens[i], "Identificador"))
+        return i
+    i += 1
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    if(tokens[i].tipoToken == TipoToken.OpAtribuicao):
+        i = variableInitializer(tokens, i)
+    return i
+
+def variableInitializer(tokens, i):
     return i + 1
 
 

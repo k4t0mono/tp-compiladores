@@ -4,5 +4,8 @@ import as;
 import teste;
 import a;
 public private abstract static static protected class arroz extends pao {
-    public aaa ola(){asdasd}
+    public aaa ola(){
+        boolean
+        char b
+    }
 }

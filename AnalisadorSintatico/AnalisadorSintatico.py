@@ -14,6 +14,21 @@ def erroTokenInesperado(tokenInesperado, tokenEsperado):
 def acabaramOsTokens(tokens, i):
     return i >= len(tokens)
 
+
+def eUmQualifiedIdentifier(tokens, i):
+    while((not acabaramOsTokens(tokens, i)) and
+          (tokens[i].tipoToken == TipoToken.Identificador)):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            return True
+        if(tokens[i].tipoToken == TipoToken.SepPonto):
+            i += 1
+        else:
+            return True
+    if(acabaramOsTokens(tokens, i)):
+        return False
+    return False
+
 def eUmModifier(token):
     if(token.tipoToken == TipoToken.PCPublic):
         return True
@@ -35,6 +50,33 @@ def eUmBasicType(token):
     if(token.tipoToken == TipoToken.PCInt):
         return True
     return False
+
+def eUmReferenceType(tokens, i):
+    if(eUmBasicType(tokens[i])):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            return False
+        if(tokens[i].tipoToken != TipoToken.SepAbreColchetes):
+            return False
+    elif(eUmQualifiedIdentifier(tokens, i)):
+        i = qualifiedIdentifier(tokens, i)
+        if((acabaramOsTokens(tokens, i)) or
+           (tokens[i].tipoToken != TipoToken.SepAbreColchetes)):
+            return True
+    else:
+        return False
+    while((not acabaramOsTokens(tokens, i)) and
+          (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            return False
+        if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
+            return False
+        i += 1
+    return True
+
+def eUmType(tokens, i):
+    return (eUmBasicType(tokens[i]) or eUmReferenceType(tokens, i))
 
 def eUmLiteral(token):
     if(token.tipoToken == TipoToken.IntLiteral):
@@ -262,7 +304,7 @@ def blockStatement(tokens, i):
             k = j
             j = qualifiedIdentifier(tokens, j)
             if(tokens[j].tipoToken == TipoToken.SepAbreColchetes):
-                j = typeDeclaration(tokens, k)
+                j = typeOfDeclaration(tokens, k)
             if(tokens[j].tipoToken == TipoToken.Identificador):
                 entrou = True
         elif(eUmBasicType(tokens[j])):
@@ -539,7 +581,6 @@ def referenceType(tokens, i):
     return i
 
 def arguments(tokens, i):
-    print("CHAMOU ARGUMENTS")
     if(acabaramOsTokens(tokens, i)):
         print(erroEstouro("SepAbreParenteses"))
         return i
@@ -646,7 +687,6 @@ def unaryExpression(tokens, i):
     if(acabaramOsTokens(tokens, i)):
         print(erroEstouro("expressao unaria"))
         return i
-
     if(tokens[i].tipoToken == TipoToken.OpIncremento):
         i += 1
         i = unaryExpression(tokens, i)
@@ -659,6 +699,9 @@ def unaryExpression(tokens, i):
     i = simpleUnaryExpression(tokens, i)
     return i
 
+# PROBLEMA!!!!!!!
+# DIFERENCIAR parExpression
+#    de (referenceType) simpleUnaryExpression!!!!!!
 def simpleUnaryExpression(tokens, i):
     if(acabaramOsTokens(tokens, i)):
         print(erroEstouro("expressao unaria simples"))
@@ -699,26 +742,193 @@ def simpleUnaryExpression(tokens, i):
                 i += 1
                 i = unaryExpression(tokens, i)
                 return i
-        else:
+        elif(eUmReferenceType(tokens, i)):
+            print(eUmReferenceType(tokens, i))
+            print(tokens[i])
             i = referenceType(tokens, i)
-        if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaParenteses"))
+            if(acabaramOsTokens(tokens, j)):
+                print(erroEstouro("SepFechaParenteses"))
+                return i
+            if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
+                print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+            i += 1
+            i = simpleUnaryExpression(tokens, i)
             return i
-        if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
-            print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
-        i += 1
-        i = simpleUnaryExpression(tokens, i)
-        return i
+        else:
+            i -= 1
+            i = postfixExpression(tokens, i)
+            return i
 
     i = postfixExpression(tokens, i)
     return i
 
 def postfixExpression(tokens, i):
-    i = primary(tokens, i)        
+    i = primary(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    while((tokens[i].tipoToken == TipoToken.SepPonto) or
+          (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
+        i = selector(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            return i
+    while(tokens[i].tipoToken == TipoToken.OpDecremento):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            return i
+    return i
+
+def selector(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepPonto"))
+        return i
+    if(tokens[i].tipoToken == TipoToken.SepPonto):
+        i += 1
+        i = qualifiedIdentifier(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+            i = arguments(tokens, i)
+        return i
+    if(tokens[i].tipoToken == TipoToken.SepAbreColchetes):
+        i += 1
+        i = expression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepAbreColchetes"))
+            return i
+        if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
+            print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+            return i
+        i += 1
+        return i
     return i
 
 def primary(tokens, i):
-    i = literal(tokens, i)
+    # print("NAO ENTRA?", tokens[i])
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("tokens de primary"))
+        return i
+    if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+        i = parExpression(tokens, i)
+        return i
+    if(tokens[i].tipoToken == TipoToken.PCThis):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+            i = arguments(tokens, i)
+            return i
+        return i
+    if(tokens[i].tipoToken == TipoToken.PCSuper):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("argumentos"))
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+            i = arguments(tokens, i)
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepPonto):
+            i += 1
+            i = qualifiedIdentifier(tokens, i)
+            if(acabaramOsTokens(tokens, i)):
+                return i
+            if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+                i = arguments(tokens, i)
+            return i
+        print(erroTokenInesperado(tokens[i], "SepPonto ou argumentos"))
+        return i + 1
+    if(eUmLiteral(tokens[i])):
+        i = literal(tokens, i)
+        return i
+    if(tokens[i].tipoToken == TipoToken.PCNew):
+        i += 1
+        i = creator(tokens, i)
+        return i
+    j = i
+    i = qualifiedIdentifier(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        return i
+    if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+        i = arguments(tokens, i)
+    if(j == i):
+        i += 1
+    return i
+
+def creator(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("<primeiro de creator>"))
+        return i
+    if(eUmType(tokens, i)):
+        if(eUmReferenceType(tokens, i)):
+            i = referenceType(tokens, i)
+            if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+                i = arguments(tokens, i)
+                return i
+            i = arrayInitializer(tokens, i)
+            return i
+        i = basicType(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("argumentos"))
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+            i = arguments(tokens, i)
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepAbreColchetes):
+            i = newArrayDeclarator(tokens, i)
+            return i
+    elif(eUmQualifiedIdentifier(tokens, i)):
+        i = qualifiedIdentifier(tokens, i)
+        if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
+            i = arguments(tokens, i)
+            return i
+        i = newArrayDeclarator(tokens, i)
+        return i
+    print(erroTokenInesperado(tokens[i], "token de type"))
+    return i
+
+def newArrayDeclarator(tokens, i):
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepAbreColchetes"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepAbreColchetes):
+        print(erroTokenInesperado(tokens[i], "SepAbreColchetes"))
+        return i
+    i += 1
+    i = expression(tokens, i)
+    if(acabaramOsTokens(tokens, i)):
+        print(erroEstouro("SepFechaColchetes"))
+        return i
+    if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
+        print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+        return i
+    i += 1
+    while((not acabaramOsTokens(tokens, i)) and
+        (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
+        i += 1
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepFechaColchetes"))
+            return i
+        if(tokens[i].tipoToken == TipoToken.SepFechaColchetes):
+            i += 1
+            while((not acabaramOsTokens(tokens, i)) and
+                (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
+                i += 1
+                if(acabaramOsTokens(tokens, i)):
+                    print(erroEstouro("SepFechaColchetes"))
+                    return i
+                if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
+                    print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+                    return i
+                i += 1
+            return i
+
+        i = expression(tokens, i)
+        if(acabaramOsTokens(tokens, i)):
+            print(erroEstouro("SepFechaColchetes"))
+            return i
+        if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
+            print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+            return i
+        i += 1
     return i
 
 def literal(tokens, i):
@@ -733,6 +943,10 @@ def literal(tokens, i):
 
 
 def main(tokens):
+    # print("=====================================")
+    # for token in tokens:
+    #     print(token)
+    # print("=====================================")
     i = compilationUnit(tokens, 0)
     print(i)
     return "OK"

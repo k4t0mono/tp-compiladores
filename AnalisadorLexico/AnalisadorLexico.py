@@ -982,6 +982,10 @@ def main(linhas):
                 else:
                     TOKENS_E_DADOS.append(([linhas[lin][item], lin + 1, cont + 1, TOKENS[-1].getTipoToken()]))
                 cont += len(linhas[lin][item])
+                # print("=====================================")
+                # for token in TOKENS:
+                #     print(token)
+                # print("=====================================")
             else:
                 cont += 1
     return (TOKENS, TABELA, TOKENS_E_DADOS, ERROS)

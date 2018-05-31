@@ -26,7 +26,7 @@ def main(args):
 
     # imprimeTokens(dadosTokens)
     # imprimeErros(errosLexicos)
-    # imprimeTabela(tabela)
+    imprimeTabela(tabela)
     # imprimeFluxoDeTokens(tokens)
 
 

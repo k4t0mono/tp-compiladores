@@ -37,10 +37,15 @@ def imprimeErrosAnaliseSintatica(erros, dadosTokens):
         if(erro[0] == -1):
             saida += "Esperado o token " + erro[1] + " antes do fim do arquivo.\n"
         else:
-            saida += "Esperado o token " + erro[1] + " porém foi encontrado o token " + # CONTINUA AQUIIIIII
-    
-    
-    
+            saida += "Esperado o token <" + str(erro[1])
+            saida += "> porém foi encontrado o token <" + str(dadosTokens[erro[0]][3])
+            saida += "> na linha " + str(dadosTokens[erro[0]][1]) + " e coluna "
+            saida += str(dadosTokens[erro[0]][2]) + ". Lexema: "
+            saida += str(dadosTokens[erro[0]][0]) + "\n"
+        print(saida)
+
+
+
 def imprimeFluxoDeTokens(tokens):
     i = 0
     for item in tokens:

@@ -5,10 +5,14 @@
 from Gerenciador import TipoToken
 
 
+POSICAO_TOKEN_ERRO = []
+
 def erroEstouro(esperado):
+    POSICAO_TOKEN_ERRO.append((-1, esperado))
     return "ERRO: estourou o numero de tokens antes do token esperado (" + esperado + ")!"
 
-def erroTokenInesperado(tokenInesperado, tokenEsperado):
+def erroTokenInesperado(tokenInesperado, tokenEsperado, i):
+    POSICAO_TOKEN_ERRO.append((i, tokenEsperado))
     return "ERRO: inesperado token " + str(tokenInesperado) + ". Esperado <" + str(tokenEsperado) + ">!"
 
 def acabaramOsTokens(tokens, i):
@@ -100,12 +104,12 @@ def compilationUnit(tokens, i):
         i += 1
         i = qualifiedIdentifier(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepPontoVirgula"))
+            erroEstouro("SepPontoVirgula")
             return i
         if(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
             i += 1
         else:
-            print(erroTokenInesperado(tokens[i], "Identificador"))
+            erroTokenInesperado(tokens[i], "Identificador", i)
     if(acabaramOsTokens(tokens, i)):
         return i
     while((not acabaramOsTokens(tokens, i)) and
@@ -113,18 +117,18 @@ def compilationUnit(tokens, i):
         i += 1
         i = qualifiedIdentifier(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepPontoVirgula"))
+            erroEstouro("SepPontoVirgula")
             return i
         if(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
             i += 1
         else:
-            print(erroTokenInesperado(tokens[i], "SepPontoVirgula"))
+            erroTokenInesperado(tokens[i], "SepPontoVirgula", i)
     while(not acabaramOsTokens(tokens, i)):
         i = typeDeclaration(tokens, i)
 
     if(acabaramOsTokens(tokens, i)):
         return i
-    print(erroTokenInesperado(tokens[i], "fim de arquivo"))
+    erroTokenInesperado(tokens[i], "fim de arquivo", i)
 
 
 def qualifiedIdentifier(tokens, i):
@@ -140,9 +144,9 @@ def qualifiedIdentifier(tokens, i):
         else:
             return i
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("Identificador"))
+        erroEstouro("Identificador")
         return i
-    print(erroTokenInesperado(tokens[i], "Identificador"))
+    erroTokenInesperado(tokens[i], "Identificador", i)
     if(acabaramOsTokens(tokens, i + 1)):
         return i
     return i
@@ -160,57 +164,57 @@ def modifiers(tokens, i):
 
 def classDeclaration(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("PCClass"))
+        erroEstouro("PCClass")
         return i
     if(tokens[i].tipoToken != TipoToken.PCClass):
-        print(erroTokenInesperado(tokens[i], "PCClass"))
+        erroTokenInesperado(tokens[i], "PCClass", i)
         return i + 1
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("Identificador"))
+        erroEstouro("Identificador")
         return i
     if(tokens[i].tipoToken != TipoToken.Identificador):
-        print(erroTokenInesperado(tokens[i], "Identificador"))
+        erroTokenInesperado(tokens[i], "Identificador", i)
         return i + 1
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<primeiro token de classBody>"))
+        erroEstouro("<primeiro token de classBody>")
         return i
     if(tokens[i].tipoToken == TipoToken.PCExtends):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("Identificador"))
+            erroEstouro("Identificador")
             return i + 1
         i = qualifiedIdentifier(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<primeiro token de classBody>"))
+        erroEstouro("<primeiro token de classBody>")
         return i
     i = classBody(tokens, i)
     return i
 
 def classBody(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreChaves"))
+        erroEstouro("SepAbreChaves")
         return i
     if(tokens[i].tipoToken != TipoToken.SepAbreChaves):
-        print(erroTokenInesperado(tokens[i], "SepAbreChaves"))
+        erroTokenInesperado(tokens[i], "SepAbreChaves", i)
         return i + 1
 
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaChaves"))
+        erroEstouro("SepFechaChaves")
         return i
     while((not acabaramOsTokens(tokens, i)) and
           (tokens[i].tipoToken != TipoToken.SepFechaChaves)):
         if(eUmModifier(tokens[i])):
             i = modifiers(tokens, i)
         else:
-            print(erroTokenInesperado(tokens[i], "um modifier"))
+            erroTokenInesperado(tokens[i], "um modifier", i)
             i += 1
             continue
         i = memberDecl(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaChaves"))
+        erroEstouro("SepFechaChaves")
         return i
 
         return i + 1
@@ -218,7 +222,7 @@ def classBody(tokens, i):
 
 def memberDecl(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<primeiro token de memberDecl>"))
+        erroEstouro("<primeiro token de memberDecl>")
         return i
 
     #Construtor
@@ -233,12 +237,12 @@ def memberDecl(tokens, i):
     if(tokens[i].tipoToken == TipoToken.PCVoid):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("Identificador"))
+            erroEstouro("Identificador")
             return i
     else:
         i = typeOfDeclaration(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("Identificador"))
+            erroEstouro("Identificador")
             return i
         if(tokens[i].tipoToken == TipoToken.Identificador):
             j = i + 1
@@ -246,10 +250,10 @@ def memberDecl(tokens, i):
                 if(tokens[j].tipoToken != TipoToken.SepAbreParenteses):
                     i = variableDeclarators(tokens, i)
                     if(acabaramOsTokens(tokens, i)):
-                        print(erroEstouro("SepPontoVirgula"))
+                        erroEstouro("SepPontoVirgula")
                         return i
                     if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
-                        print(erroTokenInesperado(tokens[i], "SepPontoVirgula"))
+                        erroTokenInesperado(tokens[i], "SepPontoVirgula", i)
                         return i
                     i += 1
                     return i
@@ -259,7 +263,7 @@ def memberDecl(tokens, i):
     i = formalParamaters(tokens, i)
 
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<primeiro do bloco> ou SepPontoVirgula"))
+        erroEstouro("<primeiro do bloco> ou SepPontoVirgula")
         return i
 
     if(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
@@ -271,25 +275,25 @@ def memberDecl(tokens, i):
 
 def block(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreChaves"))
+        erroEstouro("SepAbreChaves")
         return i
     if(tokens[i].tipoToken != TipoToken.SepAbreChaves):
-        print(erroTokenInesperado(tokens[i], "SepAbreChaves"))
+        erroTokenInesperado(tokens[i], "SepAbreChaves", i)
         return i
 
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaChaves"))
+        erroEstouro("SepFechaChaves")
         return i
 
     while(tokens[i].tipoToken != TipoToken.SepFechaChaves):
         i = blockStatement(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaChaves"))
+            erroEstouro("SepFechaChaves")
             return i
 
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaChaves"))
+        erroEstouro("SepFechaChaves")
         return i
 
     i += 1
@@ -320,7 +324,7 @@ def blockStatement(tokens, i):
 
 def statement(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<token de statement>"))
+        erroEstouro("<token de statement>")
         return i
 
     if(tokens[i].tipoToken == TipoToken.SepAbreChaves):
@@ -331,7 +335,7 @@ def statement(tokens, i):
         #VERIFICAR DEPOIS
         # i += 1
         # if(acabaramOsTokens(tokens, i)):
-        #     print(erroEstouro(":"))
+        #     erroEstouro(":"))
         #     return i
         # i += 1
         # i = statement(tokens, i)
@@ -359,7 +363,7 @@ def statement(tokens, i):
     if(tokens[i].tipoToken == TipoToken.PCReturn):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepPontoVirgula"));
+            erroEstouro("SepPontoVirgula")
             return i
         if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
             i = expression(tokens, i)
@@ -370,10 +374,10 @@ def statement(tokens, i):
 
     i = statementExpression(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepPontoVirgula"))
+        erroEstouro("SepPontoVirgula")
         return i
     if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
-        print(erroTokenInesperado(tokens[i], "SepPontoVirgula"))
+        erroTokenInesperado(tokens[i], "SepPontoVirgula", i)
         return i
     i += 1
     return i
@@ -381,30 +385,30 @@ def statement(tokens, i):
 
 def formalParamaters(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreParenteses"))
+        erroEstouro("SepAbreParenteses")
         return i
     if(tokens[i].tipoToken != TipoToken.SepAbreParenteses):
-        print(erroTokenInesperado(tokens[i], "SepAbreParenteses"))
+        erroTokenInesperado(tokens[i], "SepAbreParenteses", i)
         return i
 
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaParenteses"))
+        erroEstouro("SepFechaParenteses")
         return i
     if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
         i = formalParamater(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaParenteses"))
+            erroEstouro("SepFechaParenteses")
             return i
         while(tokens[i].tipoToken == TipoToken.SepVirgula):
             i += 1
             i = formalParamater(tokens, i)
             if(acabaramOsTokens(tokens, i)):
-                print(erroEstouro("<token de formalParamater>"))
+                erroEstouro("<token de formalParamater>")
                 return i
 
     if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
-        print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+        erroTokenInesperado(tokens[i], "SepFechaParenteses", i)
         return i
 
     i += 1
@@ -412,53 +416,53 @@ def formalParamaters(tokens, i):
 
 def formalParamater(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<token de type>"))
+        erroEstouro("<token de type>")
         return i
     i = typeOfDeclaration(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("Identificador"))
+        erroEstouro("Identificador")
         return i
     if(tokens[i].tipoToken != TipoToken.Identificador):
-        print(erroTokenInesperado(tokens[i], "Identificador"))
+        erroTokenInesperado(tokens[i], "Identificador", i)
         return i
     i += 1
     return i
 
 def parExpression(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreParenteses"))
+        erroEstouro("SepAbreParenteses")
         return i
     if(tokens[i].tipoToken != TipoToken.SepAbreParenteses):
-        print(erroTokenInesperado(tokens[i], "SepAbreParenteses"))
+        erroTokenInesperado(tokens[i], "SepAbreParenteses", i)
         return i
 
     i += 1
     i = expression(tokens, i)
 
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaParenteses"))
+        erroEstouro("SepFechaParenteses")
         return i
 
     if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
-        print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+        erroTokenInesperado(tokens[i], "SepFechaParenteses", i)
         return i
     i += 1
     return i
 
 def localVariableDeclarationStatement(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<token que define um type>"))
+        erroEstouro("<token que define um type>")
         return i
     i = typeOfDeclaration(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<token de variableDeclarators>"))
+        erroEstouro("<token de variableDeclarators>")
         return i
     i = variableDeclarators(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepPontoVirgula"))
+        erroEstouro("SepPontoVirgula")
         return i
     if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
-        print(erroTokenInesperado(tokens[i], "SepPontoVirgula"))
+        erroTokenInesperado(tokens[i], "SepPontoVirgula", i)
         return i
     i += 1
     return i
@@ -470,17 +474,17 @@ def variableDeclarators(tokens, i):
     while(tokens[i].tipoToken == TipoToken.SepVirgula):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("<token de variableDeclarator>"))
+            erroEstouro("<token de variableDeclarator>")
             return i
         i = variableDeclarator(tokens, i)
     return i
 
 def variableDeclarator(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("Identificador"))
+        erroEstouro("Identificador")
         return i
     if(tokens[i].tipoToken != TipoToken.Identificador):
-        print(erroTokenInesperado(tokens[i], "Identificador"))
+        erroTokenInesperado(tokens[i], "Identificador", i)
         return i
     i += 1
     if(acabaramOsTokens(tokens, i)):
@@ -492,7 +496,7 @@ def variableDeclarator(tokens, i):
 
 def variableInitializer(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<token de variableInitializer>"))
+        erroEstouro("<token de variableInitializer>")
         return i
     if(tokens[i].tipoToken == TipoToken.SepAbreChaves):
         i = arrayInitializer(tokens, i)
@@ -502,27 +506,27 @@ def variableInitializer(tokens, i):
 
 def arrayInitializer(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreChaves"))
+        erroEstouro("SepAbreChaves")
         return i
 
     if(tokens[i].tipoToken != TipoToken.SepAbreChaves):
-        print(erroTokenInesperado(tokens[i], "SepAbreChaves"))
+        erroTokenInesperado(tokens[i], "SepAbreChaves", i)
         return i
 
     i += 1
     i = variableInitializer(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaChaves"))
+        erroEstouro("SepFechaChaves")
         return i
     while(tokens[i].tipoToken == TipoToken.SepVirgula):
         i += 1
         i = variableInitializer(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaChaves"))
+            erroEstouro("SepFechaChaves")
             return i
 
     if(tokens[i].tipoToken != TipoToken.SepFechaChaves):
-        print(erroTokenInesperado(tokens[i], "SepFechaChaves"))
+        erroTokenInesperado(tokens[i], "SepFechaChaves", i)
         return i
 
     i += 1
@@ -530,7 +534,7 @@ def arrayInitializer(tokens, i):
 
 def typeOfDeclaration(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<primeiro token do tipo>"))
+        erroEstouro("<primeiro token do tipo>")
         return i
     if(eUmBasicType(tokens[i])):
         if(not acabaramOsTokens(tokens, i + 1)):
@@ -544,24 +548,24 @@ def typeOfDeclaration(tokens, i):
 
 def basicType(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<PCBoolean, PCChar ou PCInt>"))
+        erroEstouro("<PCBoolean, PCChar ou PCInt>")
         return i
     if(not eUmBasicType(tokens[i])):
-        print(erroTokenInesperado(tokens[i], "<PCBoolean, PCChar ou PCInt>"))
+        erroTokenInesperado(tokens[i], "<PCBoolean, PCChar ou PCInt>", i)
         return i
     return i + 1
 
 def referenceType(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<PCBoolean, PCChar ou PCInt>"))
+        erroEstouro("<PCBoolean, PCChar ou PCInt>")
         return i
     if(eUmBasicType(tokens[i])):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepAbreColchetes"))
+            erroEstouro("SepAbreColchetes")
             return i
         if(tokens[i].tipoToken != TipoToken.SepAbreColchetes):
-            print(erroTokenInesperado(tokens[i], "SepAbreColchetes"))
+            erroTokenInesperado(tokens[i], "SepAbreColchetes", i)
             return i
     else:
         i = qualifiedIdentifier(tokens, i)
@@ -572,35 +576,35 @@ def referenceType(tokens, i):
           (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaColchetes"))
+            erroEstouro("SepFechaColchetes")
             return i
         if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
-            print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+            erroTokenInesperado(tokens[i], "SepFechaColchetes", i)
             return i
         i += 1
     return i
 
 def arguments(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreParenteses"))
+        erroEstouro("SepAbreParenteses")
         return i
     if(tokens[i].tipoToken != TipoToken.SepAbreParenteses):
-        print(erroTokenInesperado(tokens[i], "SepAbreParenteses"))
+        erroTokenInesperado(tokens[i], "SepAbreParenteses", i)
         return i
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaParenteses"))
+        erroEstouro("SepFechaParenteses")
         return i
     if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
         i = expression(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaParenteses"))
+            erroEstouro("SepFechaParenteses")
             return i
         while(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
             i += 1
             i = expression(tokens, i)
             if(acabaramOsTokens(tokens, i)):
-                print(erroEstouro("SepFechaParenteses"))
+                erroEstouro("SepFechaParenteses")
                 return i
     i += 1
     return i
@@ -685,7 +689,7 @@ def multiplicativeExpression(tokens, i):
 
 def unaryExpression(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("expressao unaria"))
+        erroEstouro("expressao unaria")
         return i
     if(tokens[i].tipoToken == TipoToken.OpIncremento):
         i += 1
@@ -704,7 +708,7 @@ def unaryExpression(tokens, i):
 #    de (referenceType) simpleUnaryExpression!!!!!!
 def simpleUnaryExpression(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("expressao unaria simples"))
+        erroEstouro("expressao unaria simples")
         return i
     if(tokens[i].tipoToken == TipoToken.OpNot):
         i += 1
@@ -715,42 +719,42 @@ def simpleUnaryExpression(tokens, i):
     if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("basicType ou referenceType"))
+            erroEstouro("basicType ou referenceType")
             return i
         if(eUmBasicType(tokens[i])):
             j = basicType(tokens, i)
             if(acabaramOsTokens(tokens, j)):
-                print(erroEstouro("SepFechaParenteses"))
+                erroEstouro("SepFechaParenteses")
                 return i
             if(tokens[j].tipoToken == TipoToken.SepAbreColchetes):
                 i = referenceType(tokens, i)
                 if(acabaramOsTokens(tokens, i)):
-                    print(erroEstouro("SepFechaParenteses"))
+                    erroEstouro("SepFechaParenteses")
                     return i
                 if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
-                    print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+                    erroTokenInesperado(tokens[i], "SepFechaParenteses", i)
                 i += 1
                 i = simpleUnaryExpression(tokens, i)
                 return i
             else:
                 i = j
                 if(acabaramOsTokens(tokens, i)):
-                    print(erroEstouro("SepFechaParenteses"))
+                    erroEstouro("SepFechaParenteses")
                     return i
                 if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
-                    print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+                    erroTokenInesperado(tokens[i], "SepFechaParenteses", i)
                 i += 1
                 i = unaryExpression(tokens, i)
                 return i
         elif(eUmReferenceType(tokens, i)):
-            print(eUmReferenceType(tokens, i))
-            print(tokens[i])
+            eUmReferenceType(tokens, i)
+            
             i = referenceType(tokens, i)
             if(acabaramOsTokens(tokens, j)):
-                print(erroEstouro("SepFechaParenteses"))
+                erroEstouro("SepFechaParenteses")
                 return i
             if(tokens[i].tipoToken != TipoToken.SepFechaParenteses):
-                print(erroTokenInesperado(tokens[i], "SepFechaParenteses"))
+                erroTokenInesperado(tokens[i], "SepFechaParenteses", i)
             i += 1
             i = simpleUnaryExpression(tokens, i)
             return i
@@ -779,7 +783,7 @@ def postfixExpression(tokens, i):
 
 def selector(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepPonto"))
+        erroEstouro("SepPonto")
         return i
     if(tokens[i].tipoToken == TipoToken.SepPonto):
         i += 1
@@ -793,10 +797,10 @@ def selector(tokens, i):
         i += 1
         i = expression(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepAbreColchetes"))
+            erroEstouro("SepAbreColchetes")
             return i
         if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
-            print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+            erroTokenInesperado(tokens[i], "SepFechaColchetes", i)
             return i
         i += 1
         return i
@@ -805,7 +809,7 @@ def selector(tokens, i):
 def primary(tokens, i):
     # print("NAO ENTRA?", tokens[i])
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("tokens de primary"))
+        erroEstouro("tokens de primary")
         return i
     if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
         i = parExpression(tokens, i)
@@ -821,7 +825,7 @@ def primary(tokens, i):
     if(tokens[i].tipoToken == TipoToken.PCSuper):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("argumentos"))
+            erroEstouro("argumentos")
             return i
         if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
             i = arguments(tokens, i)
@@ -834,7 +838,7 @@ def primary(tokens, i):
             if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
                 i = arguments(tokens, i)
             return i
-        print(erroTokenInesperado(tokens[i], "SepPonto ou argumentos"))
+        erroTokenInesperado(tokens[i], "SepPonto ou argumentos", i)
         return i + 1
     if(eUmLiteral(tokens[i])):
         i = literal(tokens, i)
@@ -855,7 +859,7 @@ def primary(tokens, i):
 
 def creator(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<primeiro de creator>"))
+        erroEstouro("<primeiro de creator>")
         return i
     if(eUmType(tokens, i)):
         if(eUmReferenceType(tokens, i)):
@@ -867,7 +871,7 @@ def creator(tokens, i):
             return i
         i = basicType(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("argumentos"))
+            erroEstouro("argumentos")
             return i
         if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
             i = arguments(tokens, i)
@@ -882,30 +886,30 @@ def creator(tokens, i):
             return i
         i = newArrayDeclarator(tokens, i)
         return i
-    print(erroTokenInesperado(tokens[i], "token de type"))
+    erroTokenInesperado(tokens[i], "token de type", i)
     return i
 
 def newArrayDeclarator(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepAbreColchetes"))
+        erroEstouro("SepAbreColchetes")
         return i
     if(tokens[i].tipoToken != TipoToken.SepAbreColchetes):
-        print(erroTokenInesperado(tokens[i], "SepAbreColchetes"))
+        erroTokenInesperado(tokens[i], "SepAbreColchetes", i)
         return i
     i += 1
     i = expression(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("SepFechaColchetes"))
+        erroEstouro("SepFechaColchetes")
         return i
     if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
-        print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+        erroTokenInesperado(tokens[i], "SepFechaColchetes", i)
         return i
     i += 1
     while((not acabaramOsTokens(tokens, i)) and
         (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
         i += 1
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaColchetes"))
+            erroEstouro("SepFechaColchetes")
             return i
         if(tokens[i].tipoToken == TipoToken.SepFechaColchetes):
             i += 1
@@ -913,32 +917,32 @@ def newArrayDeclarator(tokens, i):
                 (tokens[i].tipoToken == TipoToken.SepAbreColchetes)):
                 i += 1
                 if(acabaramOsTokens(tokens, i)):
-                    print(erroEstouro("SepFechaColchetes"))
+                    erroEstouro("SepFechaColchetes")
                     return i
                 if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
-                    print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+                    erroTokenInesperado(tokens[i], "SepFechaColchetes", i)
                     return i
                 i += 1
             return i
 
         i = expression(tokens, i)
         if(acabaramOsTokens(tokens, i)):
-            print(erroEstouro("SepFechaColchetes"))
+            erroEstouro("SepFechaColchetes")
             return i
         if(tokens[i].tipoToken != TipoToken.SepFechaColchetes):
-            print(erroTokenInesperado(tokens[i], "SepFechaColchetes"))
+            erroTokenInesperado(tokens[i], "SepFechaColchetes", i)
             return i
         i += 1
     return i
 
 def literal(tokens, i):
     if(acabaramOsTokens(tokens, i)):
-        print(erroEstouro("<valor literal>"))
+        erroEstouro("<valor literal>")
         return i
     if(eUmLiteral(tokens[i])):
         i += 1
         return i
-    print(erroTokenInesperado(tokens[i], "valor literal"))
+    erroTokenInesperado(tokens[i], "valor literal", i)
     return i + 1
 
 
@@ -949,4 +953,4 @@ def main(tokens):
     # print("=====================================")
     i = compilationUnit(tokens, 0)
     print(i)
-    return "OK"
+    return POSICAO_TOKEN_ERRO

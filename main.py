@@ -16,7 +16,6 @@ def main(args):
     arquivo = open(args[1], 'r')
     linhas = arquivo.read().splitlines()
     linhas = preProcessamento(linhas)
-    #print(linhas)
     resultadoAnaliseLexica = AnalisadorLexico.main(linhas)
 
     tokens = resultadoAnaliseLexica[0]
@@ -24,18 +23,29 @@ def main(args):
     dadosTokens = resultadoAnaliseLexica[2]
     errosLexicos = resultadoAnaliseLexica[3]
 
-    # imprimeTokens(dadosTokens)
-    # imprimeErros(errosLexicos)
+    imprimeTokens(dadosTokens)
+    imprimeErros(errosLexicos)
     imprimeTabela(tabela)
-    # imprimeFluxoDeTokens(tokens)
-
+    imprimeFluxoDeTokens(tokens)
 
     resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens)
-    print(resultadoAnaliseSintatica)
+    imprimeErrosAnaliseSintatica(resultadoAnaliseSintatica, dadosTokens)
 
+def imprimeErrosAnaliseSintatica(erros, dadosTokens):
+    saida = ""
+    for erro in erros:
+        if(erro[0] == -1):
+            saida += "Esperado o token " + erro[1] + " antes do fim do arquivo.\n"
+        else:
+            saida += "Esperado o token " + erro[1] + " porém foi encontrado o token " + # CONTINUA AQUIIIIII
+    
+    
+    
 def imprimeFluxoDeTokens(tokens):
+    i = 0
     for item in tokens:
-        print(item)
+        print(item, i)
+        i += 1
 
 def imprimeTokens(dadosTokens):
     for item in dadosTokens:

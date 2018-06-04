@@ -1,20 +1,63 @@
-package arroz;
-import teste.teste;
-public private abstract static protected class arroz extends  {
-    private int a;
-    public arroz(int b) {
-        a = b;
-        super.getNome(a);
-        b = 10;
-        int[] c = {1, 2, 3, 4};
-        arroz[] a = new arroz[1][2][3][][];
-        
-        
-        if( a > b ) {
-			while(a > b && b == 0 && i > "arroz" == 2 == 3 <=) {
-				a = 0;
-				b = 10;
-			}
-		}
-    }
+package pass;
+import java.lang.Integer;
+import java.lang.System;
 
+public class Series {
+    public static int ARITHMETIC = 1;
+    public static int GEOMETRIC = 2;
+    private int a; // first term
+    private int d; // common sum or multiple
+    private int n; // number of terms
+    public Series() {
+        this(1, 1, 10);
+    }
+    public Series(int a, int d, int n) {
+        this(a) = a;
+        this(d) = d;
+        this(n) = n;
+    }
+    public int computeSum(int kind) {
+        int sum = a, t = a, i = n;
+        while (i-- > 1) {
+            if (kind == ARITHMETIC) {
+                t += d;
+            } else if (kind == GEOMETRIC) {
+                t = t * d;
+            }
+            sum += t;
+        }
+        return sum;
+    }
+    public static void main(String[] args) {
+        int a = Integer.parseInt(args[0]);
+        int d = Integer.parseInt(args[1]);
+        int n = Integer.parseInt(args[2]);
+        Series s = new Series(a, d, n);
+        System.out.println("Arithmetic sum = "
+        + s.computeSum(Series.ARITHMETIC));
+        System.out.println("Geometric sum = "
+        + s.computeSum(Series.GEOMETRIC));
+    }
+    public int computeSum(int kind) {
+        int sum = a, t = a, i = n;
+        while (i- > 1) {
+            if (kind == ARITHMETIC) {
+                t += d;
+            } else if (kind == GEOMETRIC) {
+                t = t * d;
+            }
+            sum += t;
+        }
+        return sum;
+    }
+    public static void main(String[] args) {
+        int a = Integer.parseInt(args[0]);
+        int d = Integer.parseInt(args[1]);
+        int n = Integer.parseInt(args[2]);
+        Series s = new Series(a, d, n);
+        System.out.println("Arithmetic sum = "
+        + s.computeSum(Series.ARITHMETIC));
+        System.out.println("Geometric sum = "
+        + s.computeSum(Series.GEOMETRIC));
+    }
+}

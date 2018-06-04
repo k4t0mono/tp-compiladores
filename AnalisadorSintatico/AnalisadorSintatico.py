@@ -178,7 +178,7 @@ def classDeclaration(tokens, i):
         return i + 1
     i += 1
     if(acabaramOsTokens(tokens, i)):
-        erroEstouro("<primeiro token de classBody>")
+        erroEstouro("SepAbreChaves")
         return i
     if(tokens[i].tipoToken == TipoToken.PCExtends):
         i += 1
@@ -187,7 +187,7 @@ def classDeclaration(tokens, i):
             return i + 1
         i = qualifiedIdentifier(tokens, i)
     if(acabaramOsTokens(tokens, i)):
-        erroEstouro("<primeiro token de classBody>")
+        erroEstouro("SepAbreChaves")
         return i
     i = classBody(tokens, i)
     return i
@@ -600,7 +600,7 @@ def arguments(tokens, i):
         if(acabaramOsTokens(tokens, i)):
             erroEstouro("SepFechaParenteses")
             return i
-        while(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
+        while(tokens[i].tipoToken == TipoToken.SepVirgula):
             i += 1
             i = expression(tokens, i)
             if(acabaramOsTokens(tokens, i)):
@@ -748,7 +748,7 @@ def simpleUnaryExpression(tokens, i):
                 return i
         elif(eUmReferenceType(tokens, i)):
             eUmReferenceType(tokens, i)
-            
+
             i = referenceType(tokens, i)
             if(acabaramOsTokens(tokens, j)):
                 erroEstouro("SepFechaParenteses")

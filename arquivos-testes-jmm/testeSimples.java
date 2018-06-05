@@ -1,8 +1,8 @@
-package pass;
+package import; // erro aqui
 import java.lang.Integer;
 import java.lang.System;
 
-public class Series {
+public class Series extends { // erro aqui
     public static int ARITHMETIC = 1;
     public static int GEOMETRIC = 2;
     private int a; // first term
@@ -11,7 +11,7 @@ public class Series {
     public Series() {
         this(1, 1, 10);
     }
-    public Series(int a, int d, int n) {
+    public Series(int a, int d,) { // erro aqui
         this(a) = a;
         this(d) = d;
         this(n) = n;
@@ -40,18 +40,18 @@ public class Series {
     }
     public int computeSum(int kind) {
         int sum = a, t = a, i = n;
-        while (i- > 1) {
+        while (i > 1) {
             if (kind == ARITHMETIC) {
-                t += d;
+                t =+= d; //erro aqui
             } else if (kind == GEOMETRIC) {
-                t = t * d;
+                t = t * d *; // erro aqui
             }
-            sum += t;
+            sum += t++; // erro aqui
         }
-        return sum;
+        sum //erro aqui
     }
-    public static void main(String[] args) {
-        int a = Integer.parseInt(args[0]);
+    public a static void main(String[] args) { //erro aqui
+        int a = Integer.parseInt(args[]); //erro aqui
         int d = Integer.parseInt(args[1]);
         int n = Integer.parseInt(args[2]);
         Series s = new Series(a, d, n);
@@ -60,4 +60,4 @@ public class Series {
         System.out.println("Geometric sum = "
         + s.computeSum(Series.GEOMETRIC));
     }
-}
+//erro aqui

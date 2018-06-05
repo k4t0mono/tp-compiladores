@@ -367,6 +367,13 @@ def statement(tokens, i):
             return i
         if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
             i = expression(tokens, i)
+            if(acabaramOsTokens(tokens, i)):
+                erroEstouro("SepPontoVirgula")
+                return i
+            if(tokens[i].tipoToken != TipoToken.SepPontoVirgula):
+                erroTokenInesperado(tokens[i], "SepPontoVirgula", i)
+                return i
+        return i
 
     if(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
         i += 1
@@ -514,6 +521,12 @@ def arrayInitializer(tokens, i):
         return i
 
     i += 1
+    if(acabaramOsTokens(tokens, i)):
+        erroEstouro("SepFechaChaves")
+        return i
+    if(tokens[i].tipoToken == TipoToken.SepFechaChaves):
+        i += 1
+        return i
     i = variableInitializer(tokens, i)
     if(acabaramOsTokens(tokens, i)):
         erroEstouro("SepFechaChaves")

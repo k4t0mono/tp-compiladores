@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 
 from AnalisadorLexico import AnalisadorLexico
+from AnalisadorSintatico import AnalisadorSintatico
 from texttable import Texttable
 import sys
 
@@ -15,7 +16,6 @@ def main(args):
     arquivo = open(args[1], 'r')
     linhas = arquivo.read().splitlines()
     linhas = preProcessamento(linhas)
-    #print(linhas)
     resultadoAnaliseLexica = AnalisadorLexico.main(linhas)
 
     tokens = resultadoAnaliseLexica[0]
@@ -24,13 +24,34 @@ def main(args):
     errosLexicos = resultadoAnaliseLexica[3]
 
     # imprimeTokens(dadosTokens)
-    imprimeErros(errosLexicos)
+    # imprimeErros(errosLexicos)
     imprimeTabela(tabela)
-    imprimeFluxoDeTokens(tokens)
+    # imprimeFluxoDeTokens(tokens)
+
+    resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens)
+    imprimeErrosAnaliseSintatica(resultadoAnaliseSintatica, dadosTokens)
+
+def imprimeErrosAnaliseSintatica(erros, dadosTokens):
+    saida = ""
+    for erro in erros:
+        if(erro[0] == -1):
+            saida += "Esperado o token <" + erro[1] + "> antes do fim do arquivo.\n"
+        else:
+            saida += "Esperado o token <" + str(erro[1])
+            saida += "> porém foi encontrado '"
+            saida += str(dadosTokens[erro[0]][0])
+            saida += "', a.k.a <" + str(dadosTokens[erro[0]][3]) + ">\n"
+            saida += "Linha: " + str(dadosTokens[erro[0]][1]) + "\nColuna "
+            saida += str(dadosTokens[erro[0]][2]) + "\n"
+    print(saida)
+
+
 
 def imprimeFluxoDeTokens(tokens):
+    i = 0
     for item in tokens:
-        print(item)
+        print(item, i)
+        i += 1
 
 def imprimeTokens(dadosTokens):
     for item in dadosTokens:
@@ -45,7 +66,7 @@ def imprimeErros(erros):
 def imprimeTabela(tabela):
     linhas = [["Linha", "Lexema"]]
     for i in range(len(tabela.tabela)):
-        linhas.append([i + 1, tabela.tabela[i].valor])
+        linhas.append([i, tabela.tabela[i].valor])
     t = Texttable()
     t.add_rows(linhas)
     print(t.draw())

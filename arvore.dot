@@ -1,0 +1,44 @@
+digraph {
+
+	0 [label="compilationUnit"]
+	1 [label="<PCPackage>" shape=rectangle]
+	2 [label="qualifiedIdentifier"]
+	3 [label="<Identificador, 0>" shape=rectangle]
+	4 [label="<SepPonto>" shape=rectangle]
+	5 [label="<Identificador, 1>" shape=rectangle]
+	6 [label="<SepPontoVirgula>" shape=rectangle]
+	7 [label="<PCImport>" shape=rectangle]
+	8 [label="qualifiedIdentifier"]
+	9 [label="<Identificador, 2>" shape=rectangle]
+	10 [label="<SepPontoVirgula>" shape=rectangle]
+	11 [label="typeDeclaration"]
+	12 [label="modifiers"]
+	13 [label="<PCPublic>" shape=rectangle]
+	14 [label="classDeclaration"]
+	15 [label="<PCClass>" shape=rectangle]
+	16 [label="<Identificador, 3>" shape=rectangle]
+	17 [label="classBody"]
+	18 [label="<SepAbreChaves>" shape=rectangle]
+	19 [label="<SepFechaChaves>" shape=rectangle]
+
+	0 -> 1
+	0 -> 2
+	2 -> 3
+	2 -> 4
+	2 -> 5
+	0 -> 6
+	0 -> 7
+	0 -> 8
+	8 -> 9
+	0 -> 10
+	0 -> 11
+	11 -> 12
+	12 -> 13
+	11 -> 14
+	14 -> 15
+	14 -> 16
+	14 -> 17
+	17 -> 18
+	17 -> 19
+
+}

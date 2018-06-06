@@ -1,2 +1,4 @@
-package a.a.a;
-import b.b.b;
+package a.a;
+import b;
+public class arroz {
+}

@@ -1,0 +1,20 @@
+0 compilationUnit 0 None
+1 <PCPackage> 1 0
+2 qualifiedIdentifier 1 0
+3 <Identificador, 0> 2 2
+4 <SepPonto> 2 2
+5 <Identificador, 1> 2 2
+6 <SepPontoVirgula> 1 0
+7 <PCImport> 1 0
+8 qualifiedIdentifier 1 0
+9 <Identificador, 2> 2 8
+10 <SepPontoVirgula> 1 0
+11 typeDeclaration 1 0
+12 modifiers 2 11
+13 <PCPublic> 3 12
+14 classDeclaration 2 11
+15 <PCClass> 3 14
+16 <Identificador, 3> 3 14
+17 classBody 3 14
+18 <SepAbreChaves> 4 17
+19 <SepFechaChaves> 4 17

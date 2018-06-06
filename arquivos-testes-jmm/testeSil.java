@@ -8,6 +8,7 @@ public abstract class Aluno extends Cuba{
         char a = 1;
         boolean a = true;
         boolean[][][][] a = new boolean[]{a = s};
+        boolean b = new int[i + 1];
         this(i) = 0;
         a = null;
 

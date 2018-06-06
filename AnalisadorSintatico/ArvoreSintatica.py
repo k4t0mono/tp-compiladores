@@ -37,19 +37,23 @@ class ArvoreSintatica:
 
 
     def percorreArvore(self):
-        self.percorreArvoreRecursivo(self.raiz)
+        saida = self.percorreArvoreRecursivo(self.raiz, "")
+        # print(saida)
+        return saida
 
-    def percorreArvoreRecursivo(self, noh):
+    def percorreArvoreRecursivo(self, noh, saida):
         if(noh == None):
-            return
-
+            return ""
         pai = None
         if(noh.pai != None):
             pai = noh.pai.idArvore
-        print(noh.idArvore, noh.nome, noh.nivel, pai)
+        saida += str(noh.idArvore) + " " + str(noh.nome) + " " + str(noh.nivel) + " " + str(pai) + "\n"
+        # print(noh.idArvore, noh.nome, noh.nivel, pai)
         if(len(noh.filhos) > 0):
             for filho in noh.filhos:
-                self.percorreArvoreRecursivo(filho)
+                saida = self.percorreArvoreRecursivo(filho, saida)
+            return saida
+        return saida
 
 
     def percorrePorNivel(self):

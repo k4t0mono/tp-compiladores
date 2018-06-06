@@ -18,7 +18,7 @@ public abstract class Aluno extends Cuba{
             }
 
         } else {
-            super.get(a, b, c);
+            super.get.a(a, b, c);
         }
     }
     public static void main(String args) {

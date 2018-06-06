@@ -152,7 +152,6 @@ def qualifiedIdentifier(tokens, i, pai):
         return i
     while((not acabaramOsTokens(tokens, i)) and
           (tokens[i].tipoToken == TipoToken.Identificador)):
-        print("aqui")
         addArvoreSintatica(noh, str(tokens[i]))
 
         i += 1
@@ -991,7 +990,14 @@ def primary(tokens, i, pai):
         if(tokens[i].tipoToken == TipoToken.SepPonto):
             addArvoreSintatica(noh, str(tokens[i]))
             i += 1
-            i = qualifiedIdentifier(tokens, i, noh)
+            if(acabaramOsTokens(tokens, i)):
+                return i
+            if(tokens[i].tipoToken != TipoToken.Identificador):
+                erroTokenInesperado(tokens[i], "Identificador", i)
+                return i
+            print("AQUI?", tokens[i])
+            addArvoreSintatica(noh, str(tokens[i]))
+            i += 1
             if(acabaramOsTokens(tokens, i)):
                 return i
             if(tokens[i].tipoToken == TipoToken.SepAbreParenteses):
@@ -1128,7 +1134,6 @@ def main(tokens):
     #     print(token)
     # print("=====================================")
     i = compilationUnit(tokens, 0)
-    print(i)
     print("______ARVORE_____")
     retorno = ARVORE_SINTATICA.percorreArvore()
     print(retorno)

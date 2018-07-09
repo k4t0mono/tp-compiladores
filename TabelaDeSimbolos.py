@@ -5,9 +5,9 @@ from Gerenciador import Gerenciador, TipoToken
 
 class Item:
     valor = None
+    escopo = None
     def __init__(self, valor):
         self.valor = valor
-
 
 class TabelaDeSimbolos:
     tabela = None

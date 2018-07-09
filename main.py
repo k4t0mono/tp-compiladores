@@ -28,8 +28,9 @@ def main(args):
     imprimeTabela(tabela)
     # imprimeFluxoDeTokens(tokens)
 
-    resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens)
+    resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens, tabela)
     imprimeErrosAnaliseSintatica(resultadoAnaliseSintatica, dadosTokens)
+    imprimeTabela(tabela)
 
 def imprimeErrosAnaliseSintatica(erros, dadosTokens):
     saida = ""
@@ -64,9 +65,9 @@ def imprimeErros(erros):
                                                                                     item[2], item[3]))
 
 def imprimeTabela(tabela):
-    linhas = [["Linha", "Lexema"]]
+    linhas = [["Linha", "Lexema", "Escopo"]]
     for i in range(len(tabela.tabela)):
-        linhas.append([i, tabela.tabela[i].valor])
+        linhas.append([i, tabela.tabela[i].valor, tabela.tabela[i].escopo])
     t = Texttable()
     t.add_rows(linhas)
     print(t.draw())

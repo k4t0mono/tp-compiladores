@@ -77,6 +77,7 @@ class Gerenciador:
         "*" : TipoToken.OpMultiplicacao,
     }
 
+
     separadores = {
         "," : TipoToken.SepVirgula,
         "." : TipoToken.SepPonto,
@@ -116,6 +117,22 @@ class Gerenciador:
         "while" : TipoToken.PCWhile
 
     }
+
+    def retornaBoolean(self, tipoToken):
+        return ((tipoToken == TipoToken.OpIgualdade) or 
+                (tipoToken == TipoToken.OpMenorIgual) or 
+                (tipoToken == TipoToken.OpMaior) or 
+                (tipoToken == TipoToken.OpNot) or 
+                (tipoToken == TipoToken.OpAnd))
+
+    def ehIncremento(self, tipoToken):
+        return ((tipoToken == TipoToken.OpDecremento) or
+                (tipoToken == TipoToken.OpIncremento))
+
+    def retornaValor(self, tipoToken):
+        return ((tipoToken == TipoToken.OpSoma) or 
+                (tipoToken == TipoToken.OpMenos) or 
+                (tipoToken == TipoToken.OpMultiplicacao))
 
 
     def getTipoToken(self, palavra):

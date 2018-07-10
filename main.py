@@ -50,7 +50,7 @@ def imprimeErrosAnaliseSemantica(erros, dadosTokens):
     saida = ''
 
     for erro in erros:
-        saida += 'Erro: {} Linha: {} Coluna {}\n'.format(erro[1], dadosTokens[erro[0]][1], dadosTokens[erro[0]][2])
+        saida += 'Erro: {} \t\tLinha: {} \t\tColuna {}\n'.format(erro[1], dadosTokens[erro[0]][1], dadosTokens[erro[0]][2])
 
     print(saida)
 

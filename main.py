@@ -25,12 +25,21 @@ def main(args):
 
     # imprimeTokens(dadosTokens)
     # imprimeErros(errosLexicos)
-    imprimeTabela(tabela)
+    # imprimeTabela(tabela)
     # imprimeFluxoDeTokens(tokens)
 
     resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens, tabela)
-    imprimeErrosAnaliseSintatica(resultadoAnaliseSintatica, dadosTokens)
+    imprimeErrosAnaliseSintatica(resultadoAnaliseSintatica[0], dadosTokens)
+    imprimeErrosSemanticos(resultadoAnaliseSintatica[1], dadosTokens)
     imprimeTabela(tabela)
+
+def imprimeErrosSemanticos(erros, dadosTokens):
+    saida = ''
+
+    for erro in erros:
+        saida += 'Erro: {} Linha: {} Coluna {}\n'.format(erro[1], dadosTokens[erro[0]][1], dadosTokens[erro[0]][2])
+
+    print(saida)
 
 def imprimeErrosAnaliseSintatica(erros, dadosTokens):
     saida = ""

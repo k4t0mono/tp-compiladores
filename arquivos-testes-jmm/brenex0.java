@@ -1,13 +1,19 @@
 public abstract class Aluno {
+    private int b;
+
     private void alpha() {
         int a = 3;
         int b = 4;
-        a + b;
-        if(true) {
+        {
             int a;
+            int x;
         }
+
+        int c;
+        int x;
     }
-    private int n = 0;
 
-
+    private void beta() {
+        int g;
+    }
 }

@@ -1,19 +1,6 @@
-public abstract class Aluno {
-    private int b;
-
-    private void alpha() {
+public abstract class Aluno { // idEscopo 1
+    private void alpha() { // idEscopo 2
         int a = 3;
-        int b = 4;
-        {
-            int a;
-            int x;
-        }
-
-        int c;
-        int x;
-    }
-
-    private void beta() {
-        int g;
+        char b = a;
     }
 }

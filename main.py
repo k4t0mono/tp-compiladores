@@ -5,6 +5,7 @@
 from AnalisadorLexico import AnalisadorLexico
 from AnalisadorSintatico import AnalisadorSintatico
 from texttable import Texttable
+from AnalisadorSemantico import AnalisadorSemantico
 import sys
 
 def main(args):
@@ -23,17 +24,29 @@ def main(args):
     dadosTokens = resultadoAnaliseLexica[2]
     errosLexicos = resultadoAnaliseLexica[3]
 
+    if(len(errosLexicos) > 0):
+        imprimeErrosAnaliseLexica(errosLexicos)
+        return
+
     # imprimeTokens(dadosTokens)
-    # imprimeErros(errosLexicos)
     # imprimeTabela(tabela)
     # imprimeFluxoDeTokens(tokens)
 
     resultadoAnaliseSintatica = AnalisadorSintatico.main(tokens, tabela)
-    imprimeErrosAnaliseSintatica(resultadoAnaliseSintatica[0], dadosTokens)
-    imprimeErrosSemanticos(resultadoAnaliseSintatica[1], dadosTokens)
-    imprimeTabela(tabela)
+    errosSintaticos = resultadoAnaliseSintatica[0]
+    if(len(errosSintaticos)):
+        imprimeErrosAnaliseSintatica(errosSintaticos, dadosTokens)
+        return
+    errosSemanticos = resultadoAnaliseSintatica[1]
+    if(len(errosSemanticos)):
+        imprimeErrosAnaliseSemantica(resultadoAnaliseSintatica[1], dadosTokens)
+        return
+    tabelaAux = resultadoAnaliseSintatica[2]
+    resultadoAnaliseSemantica = AnalisadorSemantico.main(tokens, tabela, tabelaAux)
+    imprimeErrosAnaliseSemantica(resultadoAnaliseSemantica, dadosTokens)
+    # imprimeTabela(tabela)
 
-def imprimeErrosSemanticos(erros, dadosTokens):
+def imprimeErrosAnaliseSemantica(erros, dadosTokens):
     saida = ''
 
     for erro in erros:
@@ -68,18 +81,13 @@ def imprimeTokens(dadosTokens):
         print('Lexema: {:24} Linha: {:3}   Coluna: {:3}   Tipo do Token: {}'.format(item[0], item[1],
                                                                                     item[2], item[3]))
 
-def imprimeErros(erros):
+def imprimeErrosAnaliseLexica(erros):
     for item in erros:
         print('Lexema: {:24} Linha: {:3}   Coluna: {:3}   Erro: {}'.format(item[0], item[1],
                                                                                     item[2], item[3]))
 
 def imprimeTabela(tabela):
-    linhas = [["Linha", "Lexema", "Escopo"]]
-    for i in range(len(tabela.tabela)):
-        linhas.append([i, tabela.tabela[i].valor, tabela.tabela[i].escopo])
-    t = Texttable()
-    t.add_rows(linhas)
-    print(t.draw())
+   print(tabela)
 
 
 

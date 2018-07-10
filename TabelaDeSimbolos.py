@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from Gerenciador import Gerenciador, TipoToken
+from texttable import Texttable
+
 
 class Item:
     valor = None
@@ -24,3 +26,12 @@ class TabelaDeSimbolos:
         item = Item(palavra)
         self.tabela.append(item)
         return (len(self.tabela) - 1)
+
+
+    def __str__(self):
+        linhas = [["Linha", "Lexema", "Escopo"]]
+        for i in range(len(self.tabela)):
+            linhas.append([i, self.tabela[i].valor, self.tabela[i].escopo])
+        t = Texttable()
+        t.add_rows(linhas)
+        return t.draw()

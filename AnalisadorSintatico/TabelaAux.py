@@ -14,11 +14,17 @@ class TabelaAux:
     def __init__(self):
         self.dados = {}
 
-    def insert(self, lexema, idEscopo, linha):
+    def insert(self, tipo, lexema, idEscopo, nivelEscopo, linha, ):
         key = ' '.join((lexema, str(idEscopo)))
 
         if(self.get(lexema, idEscopo) == None):
-            self.dados[key] = { 'lexema': lexema, 'idEscopo': idEscopo, 'linha': linha }
+            self.dados[key] = {
+                'lexema': lexema,
+                'idEscopo': idEscopo,
+                'nivelEscopo': nivelEscopo,
+                'linha': linha,
+                'tipo': tipo
+            }
             return False
         else:
             return True

@@ -6,6 +6,8 @@ from AnalisadorLexico import AnalisadorLexico
 from AnalisadorSintatico import AnalisadorSintatico
 from texttable import Texttable
 from AnalisadorSemantico import AnalisadorSemantico
+from GeradorCodigoTresEnderecos import GeradorCodigoTresEnderecos
+
 import sys
 
 def main(args):
@@ -49,11 +51,13 @@ def main(args):
     if(len(errosAnaliseSemantica) > 0):
         imprimeErrosAnaliseSemantica(errosAnaliseSemantica, dadosTokens)
         return
-        
+
     tabela = resultadoAnaliseSemantica[1]
     
     imprimeTabela(tabelaAux)
     imprimeTabela(tabela)
+
+    resultadoGeradorCodigoTresEnderecos = GeradorCodigoTresEnderecos.main(tokens)
 
 def imprimeErrosAnaliseSemantica(erros, dadosTokens):
     saida = ''

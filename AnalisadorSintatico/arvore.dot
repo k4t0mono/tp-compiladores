@@ -1,44 +1,158 @@
 digraph {
 
 	0 [label="compilationUnit"]
-	1 [label="<PCPackage>" shape=rectangle]
-	2 [label="qualifiedIdentifier"]
-	3 [label="<Identificador, 0>" shape=rectangle]
-	4 [label="<SepPonto>" shape=rectangle]
-	5 [label="<Identificador, 1>" shape=rectangle]
-	6 [label="<SepPontoVirgula>" shape=rectangle]
-	7 [label="<PCImport>" shape=rectangle]
-	8 [label="qualifiedIdentifier"]
-	9 [label="<Identificador, 2>" shape=rectangle]
-	10 [label="<SepPontoVirgula>" shape=rectangle]
-	11 [label="typeDeclaration"]
-	12 [label="modifiers"]
-	13 [label="<PCPublic>" shape=rectangle]
-	14 [label="classDeclaration"]
-	15 [label="<PCClass>" shape=rectangle]
-	16 [label="<Identificador, 3>" shape=rectangle]
-	17 [label="classBody"]
-	18 [label="<SepAbreChaves>" shape=rectangle]
-	19 [label="<SepFechaChaves>" shape=rectangle]
+	1 [label="self.typeDeclaration"]
+	2 [label="modifiers"]
+	3 [label="<PCPublic>" shape=rectangle]
+	4 [label="<PCAbstract>" shape=rectangle]
+	5 [label="self.classDeclaration"]
+	6 [label="<PCClass>" shape=rectangle]
+	7 [label="<Identificador, 0>" shape=rectangle]
+	8 [label="classBody"]
+	9 [label="<SepAbreChaves>" shape=rectangle]
+	10 [label="modifiers"]
+	11 [label="<PCPublic>" shape=rectangle]
+	12 [label="<PCStatic>" shape=rectangle]
+	13 [label="memberDecl"]
+	14 [label="<PCVoid>" shape=rectangle]
+	15 [label="<Identificador, 1>" shape=rectangle]
+	16 [label="self.formalParamaters"]
+	17 [label="<SepAbreParenteses>" shape=rectangle]
+	18 [label="<SepFechaParenteses>" shape=rectangle]
+	19 [label="self.block"]
+	20 [label="<SepAbreChaves>" shape=rectangle]
+	21 [label="blockStatement"]
+	22 [label="type"]
+	23 [label="basicType"]
+	24 [label="<PCInt>" shape=rectangle]
+	25 [label="self.localVariableDeclarationStatement"]
+	26 [label="type"]
+	27 [label="basicType"]
+	28 [label="<PCInt>" shape=rectangle]
+	29 [label="self.variableDeclarators"]
+	30 [label="self.variableDeclarator"]
+	31 [label="<Identificador, 2>" shape=rectangle]
+	32 [label="<OpAtribuicao>" shape=rectangle]
+	33 [label="variableInitializer"]
+	34 [label="self.expression"]
+	35 [label="self.assignmentExpression"]
+	36 [label="conditionalAndExpression"]
+	37 [label="equalityExpression"]
+	38 [label="self.relationalExpression"]
+	39 [label="self.additiveExpression"]
+	40 [label="multiplicativeExpression"]
+	41 [label="unaryExpression"]
+	42 [label="simpleUnaryExpression"]
+	43 [label="postfixExpression"]
+	44 [label="primary"]
+	45 [label="literal"]
+	46 [label="<IntLiteral, 3>" shape=rectangle]
+	47 [label="<SepPontoVirgula>" shape=rectangle]
+	48 [label="blockStatement"]
+	49 [label="self.qualifiedIdentifier"]
+	50 [label="<Identificador, 4>" shape=rectangle]
+	51 [label="statement"]
+	52 [label="self.statementExpression"]
+	53 [label="self.expression"]
+	54 [label="self.assignmentExpression"]
+	55 [label="conditionalAndExpression"]
+	56 [label="equalityExpression"]
+	57 [label="self.relationalExpression"]
+	58 [label="self.additiveExpression"]
+	59 [label="multiplicativeExpression"]
+	60 [label="unaryExpression"]
+	61 [label="simpleUnaryExpression"]
+	62 [label="postfixExpression"]
+	63 [label="primary"]
+	64 [label="self.qualifiedIdentifier"]
+	65 [label="<Identificador, 4>" shape=rectangle]
+	66 [label="<OpSoma>" shape=rectangle]
+	67 [label="multiplicativeExpression"]
+	68 [label="unaryExpression"]
+	69 [label="simpleUnaryExpression"]
+	70 [label="postfixExpression"]
+	71 [label="primary"]
+	72 [label="literal"]
+	73 [label="<IntLiteral, 5>" shape=rectangle]
+	74 [label="<SepPontoVirgula>" shape=rectangle]
+	75 [label="<SepFechaChaves>" shape=rectangle]
+	76 [label="<SepFechaChaves>" shape=rectangle]
 
 	0 -> 1
-	0 -> 2
+	1 -> 2
 	2 -> 3
 	2 -> 4
-	2 -> 5
-	0 -> 6
-	0 -> 7
-	0 -> 8
+	1 -> 5
+	5 -> 6
+	5 -> 7
+	5 -> 8
 	8 -> 9
-	0 -> 10
-	0 -> 11
-	11 -> 12
-	12 -> 13
-	11 -> 14
-	14 -> 15
-	14 -> 16
-	14 -> 17
-	17 -> 18
-	17 -> 19
+	8 -> 10
+	10 -> 11
+	10 -> 12
+	8 -> 13
+	13 -> 14
+	13 -> 15
+	13 -> 16
+	16 -> 17
+	16 -> 18
+	13 -> 19
+	19 -> 20
+	19 -> 21
+	21 -> 22
+	22 -> 23
+	23 -> 24
+	21 -> 25
+	25 -> 26
+	26 -> 27
+	27 -> 28
+	25 -> 29
+	29 -> 30
+	30 -> 31
+	30 -> 32
+	30 -> 33
+	33 -> 34
+	34 -> 35
+	35 -> 36
+	36 -> 37
+	37 -> 38
+	38 -> 39
+	39 -> 40
+	40 -> 41
+	41 -> 42
+	42 -> 43
+	43 -> 44
+	44 -> 45
+	45 -> 46
+	25 -> 47
+	19 -> 48
+	48 -> 49
+	49 -> 50
+	48 -> 51
+	51 -> 52
+	52 -> 53
+	53 -> 54
+	54 -> 55
+	55 -> 56
+	56 -> 57
+	57 -> 58
+	58 -> 59
+	59 -> 60
+	60 -> 61
+	61 -> 62
+	62 -> 63
+	63 -> 64
+	64 -> 65
+	58 -> 66
+	58 -> 67
+	67 -> 68
+	68 -> 69
+	69 -> 70
+	70 -> 71
+	71 -> 72
+	72 -> 73
+	51 -> 74
+	19 -> 75
+	8 -> 76
 
 }

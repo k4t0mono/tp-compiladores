@@ -77,6 +77,21 @@ class Gerenciador:
         "*" : TipoToken.OpMultiplicacao,
     }
 
+    revertorOperadores = {
+        TipoToken.OpSomaAtribuicao : "+=",
+        TipoToken.OpIgualdade : "==",
+        TipoToken.OpIncremento : "++",
+        TipoToken.OpAnd : "&&",
+        TipoToken.OpMenorIgual : "<=",
+        TipoToken.OpDecremento : "--",
+        TipoToken.OpAtribuicao : "=",
+        TipoToken.OpMaior : ">",
+        TipoToken.OpSoma : "+",
+        TipoToken.OpNot : "!",
+        TipoToken.OpMenos : "-",
+        TipoToken.OpMultiplicacao : "*",
+    }
+
 
     separadores = {
         "," : TipoToken.SepVirgula,
@@ -149,3 +164,6 @@ class Gerenciador:
         if(palavra[0] == '"' and palavra[len(palavra) - 1] == '"'):
             return TipoToken.StringLiteral
         return TipoToken.Identificador
+
+    def getStringOperador(self, tipoToken):
+        return self.revertorOperadores[tipoToken]

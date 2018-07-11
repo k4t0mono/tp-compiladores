@@ -1,26 +1,10 @@
 digraph {
 
 	0 [label="OpAtribuicao"]
-	1 [label="PCInt"]
-	2 [label="OpSoma"]
-	3 [label="OpMultiplicacao"]
-	4 [label="IntLiteral"]
-	5 [label="IntLiteral"]
-	6 [label="OpSoma"]
-	7 [label="OpMultiplicacao"]
-	8 [label="IntLiteral"]
-	9 [label="IntLiteral"]
-	10 [label="IntLiteral"]
+	1 [label="a"]
+	2 [label="3"]
 
 	0 -> 1
 	0 -> 2
-	2 -> 3
-	3 -> 4
-	3 -> 5
-	2 -> 6
-	6 -> 7
-	7 -> 8
-	7 -> 9
-	6 -> 10
 
 }

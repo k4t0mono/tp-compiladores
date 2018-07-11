@@ -1,12 +1,4 @@
 0 OpAtribuicao 0 None
-1 PCInt 0 0
-2 OpSoma 0 0
-3 OpMultiplicacao 0 2
-4 IntLiteral 0 3
-5 IntLiteral 0 3
-6 OpSoma 0 2
-7 OpMultiplicacao 0 6
-8 IntLiteral 0 7
-9 IntLiteral 0 7
-10 IntLiteral 0 6
+1 a 0 0
+2 3 0 0
 

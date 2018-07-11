@@ -57,7 +57,8 @@ def main(args):
     imprimeTabela(tabelaAux)
     imprimeTabela(tabela)
 
-    resultadoGeradorCodigoTresEnderecos = GeradorCodigoTresEnderecos.main(tokens)
+    resultadoGeradorCodigoTresEnderecos = GeradorCodigoTresEnderecos.main(tokens, tabela)
+    print(resultadoGeradorCodigoTresEnderecos, file=open("GeradorCodigoTresEnderecos/codigoIntermediario.txt", "w"))
 
 def imprimeErrosAnaliseSemantica(erros, dadosTokens):
     saida = ''

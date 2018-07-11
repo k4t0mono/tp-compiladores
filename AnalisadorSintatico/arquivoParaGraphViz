@@ -45,41 +45,63 @@
 44 primary 21 43
 45 literal 22 44
 46 <IntLiteral, 3> 23 45
-47 <OpSoma> 17 39
-48 multiplicativeExpression 17 39
-49 unaryExpression 18 48
-50 simpleUnaryExpression 19 49
-51 postfixExpression 20 50
-52 primary 21 51
-53 literal 22 52
-54 <IntLiteral, 4> 23 53
-55 <SepPontoVirgula> 8 25
-56 blockStatement 6 19
-57 self.qualifiedIdentifier 7 56
-58 <Identificador, 5> 8 57
-59 statement 7 56
-60 self.statementExpression 8 59
-61 self.expression 9 60
-62 self.assignmentExpression 10 61
-63 conditionalAndExpression 11 62
-64 equalityExpression 12 63
-65 self.relationalExpression 13 64
-66 self.additiveExpression 14 65
-67 multiplicativeExpression 15 66
-68 unaryExpression 16 67
-69 simpleUnaryExpression 17 68
-70 postfixExpression 18 69
-71 primary 19 70
-72 self.qualifiedIdentifier 20 71
-73 <Identificador, 5> 21 72
-74 <OpSoma> 15 66
-75 multiplicativeExpression 15 66
-76 unaryExpression 16 75
-77 simpleUnaryExpression 17 76
-78 postfixExpression 18 77
-79 primary 19 78
-80 literal 20 79
-81 <IntLiteral, 6> 21 80
-82 <SepPontoVirgula> 8 59
-83 <SepFechaChaves> 6 19
-84 <SepFechaChaves> 4 8
+47 <OpMultiplicacao> 18 40
+48 unaryExpression 18 40
+49 simpleUnaryExpression 19 48
+50 postfixExpression 20 49
+51 primary 21 50
+52 literal 22 51
+53 <IntLiteral, 4> 23 52
+54 <OpSoma> 17 39
+55 multiplicativeExpression 17 39
+56 unaryExpression 18 55
+57 simpleUnaryExpression 19 56
+58 postfixExpression 20 57
+59 primary 21 58
+60 literal 22 59
+61 <IntLiteral, 5> 23 60
+62 <OpMultiplicacao> 18 55
+63 unaryExpression 18 55
+64 simpleUnaryExpression 19 63
+65 postfixExpression 20 64
+66 primary 21 65
+67 literal 22 66
+68 <IntLiteral, 6> 23 67
+69 <OpSoma> 17 39
+70 multiplicativeExpression 17 39
+71 unaryExpression 18 70
+72 simpleUnaryExpression 19 71
+73 postfixExpression 20 72
+74 primary 21 73
+75 literal 22 74
+76 <IntLiteral, 7> 23 75
+77 <SepPontoVirgula> 8 25
+78 blockStatement 6 19
+79 self.qualifiedIdentifier 7 78
+80 <Identificador, 8> 8 79
+81 statement 7 78
+82 self.statementExpression 8 81
+83 self.expression 9 82
+84 self.assignmentExpression 10 83
+85 conditionalAndExpression 11 84
+86 equalityExpression 12 85
+87 self.relationalExpression 13 86
+88 self.additiveExpression 14 87
+89 multiplicativeExpression 15 88
+90 unaryExpression 16 89
+91 simpleUnaryExpression 17 90
+92 postfixExpression 18 91
+93 primary 19 92
+94 self.qualifiedIdentifier 20 93
+95 <Identificador, 8> 21 94
+96 <OpSoma> 15 88
+97 multiplicativeExpression 15 88
+98 unaryExpression 16 97
+99 simpleUnaryExpression 17 98
+100 postfixExpression 18 99
+101 primary 19 100
+102 literal 20 101
+103 <IntLiteral, 9> 21 102
+104 <SepPontoVirgula> 8 81
+105 <SepFechaChaves> 6 19
+106 <SepFechaChaves> 4 8

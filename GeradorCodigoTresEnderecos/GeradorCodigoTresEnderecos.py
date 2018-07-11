@@ -80,7 +80,12 @@ class Noh:
                 self.filhoDir = Noh(self.valor[i+1:], self)
                 self.valor = [self.valor[i]]
                 return
-                
+        for i in range(len(self.valor)):
+            if(self.valor[i].tipoToken == TipoToken.OpMultiplicacao):
+                self.filhoEsq = Noh(self.valor[:i], self)
+                self.filhoDir = Noh(self.valor[i+1:], self)
+                self.valor = [self.valor[i]]
+                return
 
     def __str__(self):
         saida = ""

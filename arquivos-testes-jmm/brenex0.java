@@ -1,7 +1,10 @@
 
 public abstract class Aluno { // idEscopo 1
-    private char a;
+    private boolean a;
     private void alpha() { // idEscopo 2
-        a == '3';
+        char t = '0';
+        char x = 'c';
+        int a = 0;
+        7 > a;
     }
 }

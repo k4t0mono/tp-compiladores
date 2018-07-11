@@ -153,7 +153,45 @@ class AnalisadorSemantico:
         return
 
     def verificaOperacaoBoolean(self, token, i):
-        print(self.mesmoTipo(i - 1, i + 1))
+        print(token.tipoToken)
+        if(token.tipoToken == TipoToken.OpIgualdade):
+            if(not self.mesmoTipo(i-1, i+1)):
+                self.ERROS_TIPAGEM.append((i, 'Comparação entre tipos diferentes'))
+            return
+        
+        if(token.tipoToken == TipoToken.OpAnd):
+            tokenEsquerda = self.FLUXO_DE_TOKENS[i-1]
+            valorEquerda = self.TABELA_SIMBOLOS.tabela[tokenEsquerda.linhaTabela].valor
+            resultadoEsquerda = self.pegaResultadoEscopoAnteriores(valorEquerda, tokenEsquerda.linhaTabela)
+            tipoEsquerda = None
+            if(resultadoEsquerda == None):
+                tipoEsquerda = tokenEsquerda.tipoToken
+            else:
+                tipoEsquerda = resultadoEsquerda['tipo']
+            if(not self.tipoBasico(tipoEsquerda) == 'bool'):
+                self.ERROS_TIPAGEM.append((i, 'Operador && deve ser usado com boolean.'))
+                return
+            if((not self.mesmoTipo(i-1, i+1))):
+                self.ERROS_TIPAGEM.append((i, 'Comparação entre tipos diferentes'))
+            return
+
+        if(token.tipoToken == TipoToken.OpMaior or token.tipoToken == TipoToken.OpMenorIgual):
+            if(not self.mesmoTipo(i-1, i+1)):
+                self.ERROS_TIPAGEM.append((i, 'Comparação entre tipos diferentes'))
+                return
+            
+            tokenEsquerda = self.FLUXO_DE_TOKENS[i-1]
+            valorEquerda = self.TABELA_SIMBOLOS.tabela[tokenEsquerda.linhaTabela].valor
+            resultadoEsquerda = self.pegaResultadoEscopoAnteriores(valorEquerda, tokenEsquerda.linhaTabela)
+            tipoEsquerda = None
+            if(resultadoEsquerda == None):
+                tipoEsquerda = tokenEsquerda.tipoToken
+            else:
+                tipoEsquerda = resultadoEsquerda['tipo']
+            if(self.tipoBasico(tipoEsquerda) == 'bool'):
+                self.ERROS_TIPAGEM.append((i, 'Operador não deve ser usado com boolean.'))
+                return
+
         return
 
     def tipoBasico(self, tipo):

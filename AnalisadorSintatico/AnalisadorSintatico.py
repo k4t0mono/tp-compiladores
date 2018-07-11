@@ -621,9 +621,20 @@ class AnalisadorSintatico:
         self.addArvoreSintatica(noh, str(tokens[i]))
 
         # Adiciona na tabela de sym
-        tipo = tokens[i-1].getTipoToken()
-        if(tokens[i-1].tipoToken == TipoToken.Identificador):
-            tipo = self.TABELA.tabela[tokens[i-1].linhaTabela].valor
+        
+        j = i - 1
+        tipo = tokens[j].getTipoToken()
+        if(tokens[j].tipoToken == TipoToken.SepVirgula):
+            j = i - 2
+            while(tokens[j].tipoToken != TipoToken.Identificador):
+                j -= 1
+            
+            lexema = self.TABELA.tabela[tokens[j].linhaTabela].valor
+            tipo = self.tabelaAux.get(lexema, self.IdEscopo)["tipo"]
+                
+        else:
+            if(tokens[j].tipoToken == TipoToken.Identificador):
+                tipo = self.TABELA.tabela[tokens[j].linhaTabela].valor
 
         erro = self.tabelaAux.insert(
             tipo,

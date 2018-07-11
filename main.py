@@ -41,10 +41,19 @@ def main(args):
     if(len(errosSemanticos)):
         imprimeErrosAnaliseSemantica(resultadoAnaliseSintatica[1], dadosTokens)
         return
+    
     tabelaAux = resultadoAnaliseSintatica[2]
     resultadoAnaliseSemantica = AnalisadorSemantico.main(tokens, tabela, tabelaAux)
-    imprimeErrosAnaliseSemantica(resultadoAnaliseSemantica, dadosTokens)
-    # imprimeTabela(tabela)
+    
+    errosAnaliseSemantica = resultadoAnaliseSemantica[0]
+    if(len(errosAnaliseSemantica) > 0):
+        imprimeErrosAnaliseSemantica(errosAnaliseSemantica, dadosTokens)
+        return
+        
+    tabela = resultadoAnaliseSemantica[1]
+    
+    imprimeTabela(tabelaAux)
+    imprimeTabela(tabela)
 
 def imprimeErrosAnaliseSemantica(erros, dadosTokens):
     saida = ''

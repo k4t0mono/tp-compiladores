@@ -22,9 +22,6 @@ class AnalisadorSemantico:
         self.FLUXO_DE_TOKENS = tokens
         self.TABELA_SIMBOLOS = tabelaSim
         self.TABELA_AUX = tabelaAux
-        # print(self.FLUXO_DE_TOKENS)
-        print(self.TABELA_AUX)
-        print(self.TABELA_SIMBOLOS)
     
     def verificaEscopoAnterior(self, escopo, valor, linha):
         achou = False
@@ -41,6 +38,8 @@ class AnalisadorSemantico:
                 escopoVerificado -= 1
                 continue
             achou = True
+        if(achou):
+            self.TABELA_SIMBOLOS.tabela[linha].linhaTabelaAux = resultado["id"]
         return achou
 
     def verificaEscopoDaVariavel(self, i, token):
@@ -53,11 +52,11 @@ class AnalisadorSemantico:
         if(resultado == None):
             return self.verificaEscopoAnterior(self.escopo - 1, valor , token.linhaTabela)
         if(resultado["linha"] > token.linhaTabela):
-            return self.verificaEscopoAnterior(self.escopo - 1, valor, token.linhaTabela)
+            return self.verificaEscopoAnterior(self.escopo - 1, valor , token.linhaTabela)
+        self.TABELA_SIMBOLOS.tabela[token.linhaTabela].linhaTabelaAux = resultado["id"]
         return True
 
     def verificaAtribuicoesTiposPrimitivos(self, tokenProximo, i, resultadoAnterior, mensagem):
-        # print(resultadoAnterior)
         if(tokenProximo.tipoToken == TipoToken.IntLiteral):
             if(resultadoAnterior["tipo"] != "PCInt"):
                 self.ERROS_TIPAGEM.append((i, 'IntLiteral ' + mensagem + ' que nao e int'))
@@ -92,14 +91,39 @@ class AnalisadorSemantico:
             return resultado
         return None
 
+
+    def verificaTiposDaOperacaoDeAtribuicao(self, i):
+        gerenciador = Gerenciador()
+        token = self.FLUXO_DE_TOKENS[i + 2]
+        while(token.tipoToken != TipoToken.SepPontoVirgula and 
+              token.tipoToken != TipoToken.SepVirgula and 
+              token.tipoToken != TipoToken.OpAtribuicao):
+            if(gerenciador.retornaBoolean(token.tipoToken)):
+                return 'bool'
+            token = self.FLUXO_DE_TOKENS[i + 2]
+            i += 2
+        return 'int'
+
+
     def verificaAtribuicao(self, token, i):
         tokenAnterior = self.FLUXO_DE_TOKENS[i - 1]
         valorAnterior = self.TABELA_SIMBOLOS.tabela[tokenAnterior.linhaTabela].valor
         resultadoAnterior = self.pegaResultadoEscopoAnteriores(valorAnterior, tokenAnterior.linhaTabela)
+        
+        if(self.FLUXO_DE_TOKENS[i + 2].tipoToken != TipoToken.SepPontoVirgula and
+           self.FLUXO_DE_TOKENS[i + 2].tipoToken != TipoToken.SepVirgula):
+            retorno = self.verificaTiposDaOperacaoDeAtribuicao(i)
+            tipo = self.tipoBasico(resultadoAnterior["tipo"])
+            if(tipo != retorno):
+                self.ERROS_TIPAGEM.append((i, "Atribuição inválida - O resultado da operação não bate com a variavel"))
+            return
+
+
         tokenProximo = self.FLUXO_DE_TOKENS[i + 1]
         if(tokenProximo.tipoToken != TipoToken.Identificador):
             self.verificaAtribuicoesTiposPrimitivos(tokenProximo, i, resultadoAnterior, "atribuido a variavel")
             return
+        
         if(self.verificaEscopoDaVariavel(i + 1, tokenProximo)):
             valorProximo = self.TABELA_SIMBOLOS.tabela[tokenProximo.linhaTabela].valor
             resultadoProximo = self.pegaResultadoEscopoAnteriores(valorProximo, tokenProximo.linhaTabela)
@@ -115,13 +139,13 @@ class AnalisadorSemantico:
             resultadoAnterior = self.pegaResultadoEscopoAnteriores(valorAnterior, tokenAnterior.linhaTabela)
 
         tokenProximo = self.FLUXO_DE_TOKENS[i + 1]
-        if(not self.verificaEscopoDaVariavel(i, tokenProximo)):
-            return
+        if((tokenProximo.tipoToken == TipoToken.Identificador) and 
+           (not self.verificaEscopoDaVariavel(i, tokenProximo))):
+                return
         valorProximo = self.TABELA_SIMBOLOS.tabela[tokenProximo.linhaTabela].valor
         resultadoProximo = None
         if(tokenProximo.tipoToken == TipoToken.Identificador):
             resultadoProximo = self.pegaResultadoEscopoAnteriores(valorProximo, tokenProximo.linhaTabela)
-        
         if(resultadoAnterior == None):
             if(tokenAnterior.tipoToken != TipoToken.IntLiteral):
                 self.ERROS_ESCOPO.append((i, "Essa operacao é invalida para esse tipo."))
@@ -153,7 +177,6 @@ class AnalisadorSemantico:
         return
 
     def verificaOperacaoBoolean(self, token, i):
-        print(token.tipoToken)
         if(token.tipoToken == TipoToken.OpIgualdade):
             if(not self.mesmoTipo(i-1, i+1)):
                 self.ERROS_TIPAGEM.append((i, 'Comparação entre tipos diferentes'))
@@ -271,4 +294,5 @@ class AnalisadorSemantico:
 def main(tokens, tabelaSimbolos, tabelaAux):
     analisadorSemantico = AnalisadorSemantico(tokens, tabelaSimbolos, tabelaAux)
     analisadorSemantico.fazerAnaliseSemantica()
-    return analisadorSemantico.ERROS_ESCOPO + analisadorSemantico.ERROS_TIPAGEM
+    return (analisadorSemantico.ERROS_ESCOPO + analisadorSemantico.ERROS_TIPAGEM, 
+            analisadorSemantico.TABELA_SIMBOLOS)

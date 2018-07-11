@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-
+from texttable import Texttable
 from Gerenciador import Gerenciador, TipoToken
 
 # class Item:
@@ -23,7 +23,8 @@ class TabelaAux:
                 'idEscopo': idEscopo,
                 'nivelEscopo': nivelEscopo,
                 'linha': linha,
-                'tipo': tipo
+                'tipo': tipo,
+                'id': len(self.dados)+1
             }
             return False
         else:
@@ -38,4 +39,12 @@ class TabelaAux:
             return None
 
     def __str__(self):
-        return json.dumps(self.dados, indent=4, sort_keys=True)
+        linhas = [['Id', "Lexema", "Escopo", "Linha (Tabela de Simbolos)", "Tipo"]]
+        for key in self.dados:
+            linhas.append([
+                self.dados[key]['id'], self.dados[key]["lexema"],
+                self.dados[key]["idEscopo"], self.dados[key]["linha"], self.dados[key]["tipo"]
+            ])
+        t = Texttable()
+        t.add_rows(linhas)
+        return t.draw()

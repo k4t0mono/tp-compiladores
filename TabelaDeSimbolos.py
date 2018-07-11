@@ -7,7 +7,7 @@ from texttable import Texttable
 
 class Item:
     valor = None
-    escopo = None
+    linhaTabelaAux = None
     def __init__(self, valor):
         self.valor = valor
 
@@ -29,9 +29,9 @@ class TabelaDeSimbolos:
 
 
     def __str__(self):
-        linhas = [["Linha", "Lexema", "Escopo"]]
+        linhas = [["Linha", "Lexema", "Linha (Tabela de Variaveis)"]]
         for i in range(len(self.tabela)):
-            linhas.append([i, self.tabela[i].valor, self.tabela[i].escopo])
+            linhas.append([i, self.tabela[i].valor, self.tabela[i].linhaTabelaAux])
         t = Texttable()
         t.add_rows(linhas)
         return t.draw()

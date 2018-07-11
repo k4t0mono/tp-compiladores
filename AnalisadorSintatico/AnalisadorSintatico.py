@@ -3,18 +3,28 @@
 # -*- coding: utf-8 -*-
 
 import copy
+import json
 
 from Gerenciador import TipoToken
 from AnalisadorSintatico.ArvoreSintatica import *
+from AnalisadorSintatico.TabelaAux import *
 
 class AnalisadorSintatico:
     POSICAO_TOKEN_ERRO = []
+    ERRO_SEMANTICO = []
     ARVORE_SINTATICA = ArvoreSintatica()
-    ESCOPO = 0
+    IdEscopo = 0
+    IdEscopoProximo = 1
+    IdEscopoAnterior = []
+    NivelEscopo = 0
+    TabelaEscopo = { 0: [] }
     TABELA = None
+    tabelaAux = None
 
     def __init__(self, tabela):
         self.TABELA = tabela
+        self.tabelaAux = TabelaAux()
+        # self.tabelaAux.insert('aaa', 'bbb')
 
     def erroEstouro(self, esperado):
         self.POSICAO_TOKEN_ERRO.append((-1, esperado))
@@ -246,6 +256,16 @@ class AnalisadorSintatico:
             return i + 1
 
         self.addArvoreSintatica(noh, str(tokens[i]))
+        # print('aqui', tokens[i])
+        self.IdEscopoAnterior.append(self.IdEscopo)
+        self.IdEscopo = self.IdEscopoProximo
+        self.IdEscopoProximo += 1
+        self.NivelEscopo += 1
+        try:
+            self.TabelaEscopo[self.NivelEscopo]
+        except KeyError:
+            self.TabelaEscopo[self.NivelEscopo] = []
+        self.TabelaEscopo[self.NivelEscopo].append(self.IdEscopo)
         i += 1
 
         if(self.acabaramOsTokens(tokens, i)):
@@ -264,6 +284,10 @@ class AnalisadorSintatico:
         if(self.acabaramOsTokens(tokens, i)):
             self.erroEstouro("SepFechaChaves")
             return i
+
+        # print('fim body', self.IdEscopoAnterior)
+        self.IdEscopo = self.IdEscopoAnterior.pop()
+        self.NivelEscopo -= 1
 
         self.addArvoreSintatica(noh, str(tokens[i]))
         return i + 1
@@ -337,6 +361,15 @@ class AnalisadorSintatico:
             return i
 
         self.addArvoreSintatica(noh, str(tokens[i]))
+        self.IdEscopoAnterior.append(self.IdEscopo)
+        self.IdEscopo = self.IdEscopoProximo
+        self.IdEscopoProximo += 1
+        self.NivelEscopo += 1
+        try:
+            self.TabelaEscopo[self.NivelEscopo]
+        except KeyError:
+            self.TabelaEscopo[self.NivelEscopo] = []
+        self.TabelaEscopo[self.NivelEscopo].append(self.IdEscopo)
         i += 1
 
         if(self.acabaramOsTokens(tokens, i)):
@@ -352,6 +385,10 @@ class AnalisadorSintatico:
         if(self.acabaramOsTokens(tokens, i)):
             self.erroEstouro("SepFechaChaves")
             return i
+
+        # print('fim block', self.IdEscopoAnterior)
+        self.IdEscopo = self.IdEscopoAnterior.pop()
+        self.NivelEscopo -= 1
 
         self.addArvoreSintatica(noh, str(tokens[i]))
         i += 1
@@ -584,12 +621,30 @@ class AnalisadorSintatico:
         self.addArvoreSintatica(noh, str(tokens[i]))
 
         # Adiciona na tabela de sym
-        print("****")
-        print(tokens[i])
-        print(self.TABELA)
-        print("****")
+        
+        j = i - 1
+        tipo = tokens[j].getTipoToken()
+        if(tokens[j].tipoToken == TipoToken.SepVirgula):
+            j = i - 2
+            while(tokens[j].tipoToken != TipoToken.Identificador):
+                j -= 1
+            
+            lexema = self.TABELA.tabela[tokens[j].linhaTabela].valor
+            tipo = self.tabelaAux.get(lexema, self.IdEscopo)["tipo"]
+                
+        else:
+            if(tokens[j].tipoToken == TipoToken.Identificador):
+                tipo = self.TABELA.tabela[tokens[j].linhaTabela].valor
 
-        self.TABELA.tabela[tokens[i].linhaTabela].escopo = self.ESCOPO
+        erro = self.tabelaAux.insert(
+            tipo,
+            self.TABELA.tabela[tokens[i].linhaTabela].valor,
+            self.IdEscopo,
+            self.NivelEscopo,
+            tokens[i].linhaTabela,
+        )
+        if(erro):
+            self.ERRO_SEMANTICO.append((i, 'Declaração duplicada'))
 
         i += 1
         if(self.acabaramOsTokens(tokens, i)):
@@ -606,8 +661,6 @@ class AnalisadorSintatico:
             self.erroEstouro("<token de variableInitializer>")
             return i
         if(tokens[i].tipoToken == TipoToken.SepAbreChaves):
-            global ESCOPO
-            self.ESCOPO += 1
             i = self.arrayInitializer(tokens, i, noh)
             return i
         i = self.expression(tokens, i, noh)
@@ -1014,7 +1067,7 @@ class AnalisadorSintatico:
                 if(tokens[i].tipoToken != TipoToken.Identificador):
                     self.erroTokenInesperado(tokens[i], "Identificador", i)
                     return i
-                print("AQUI?", tokens[i])
+                # print("AQUI?", tokens[i])
                 self.addArvoreSintatica(noh, str(tokens[i]))
                 i += 1
                 if(self.acabaramOsTokens(tokens, i)):
@@ -1155,13 +1208,19 @@ def main(tokens, tabela):
     #     print(token)
     # print("=====================================")
     i = analisadorSintatico.compilationUnit(tokens, 0)
-    print("______ARVORE_____")
+    # print("______ARVORE_____")
     retorno = analisadorSintatico.ARVORE_SINTATICA.percorreArvore()
-    print(retorno)
+    # print(retorno)
     file = open("AnalisadorSintatico/arquivoParaGraphViz", "w")
     file.write(retorno)
-    print("_______FIM ARVORE_______")
+    # print("_______FIM ARVORE_______")
     # print("______ARVORE ZUADA______")
     # self.ARVORE_SINTATICA.percorrePorNivel()
     # print("____FIM ARVORE ZUADA____")
-    return analisadorSintatico.POSICAO_TOKEN_ERRO
+
+    # print(analisadorSintatico.tabelaAux)
+    # print(json.dumps(analisadorSintatico.TabelaEscopo, sort_keys=True, indent=4))
+    return (analisadorSintatico.POSICAO_TOKEN_ERRO, 
+            analisadorSintatico.ERRO_SEMANTICO, 
+            analisadorSintatico.tabelaAux
+            )

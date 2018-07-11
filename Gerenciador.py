@@ -77,6 +77,22 @@ class Gerenciador:
         "*" : TipoToken.OpMultiplicacao,
     }
 
+    revertorOperadores = {
+        TipoToken.OpSomaAtribuicao : "+=",
+        TipoToken.OpIgualdade : "==",
+        TipoToken.OpIncremento : "++",
+        TipoToken.OpAnd : "&&",
+        TipoToken.OpMenorIgual : "<=",
+        TipoToken.OpDecremento : "--",
+        TipoToken.OpAtribuicao : "=",
+        TipoToken.OpMaior : ">",
+        TipoToken.OpSoma : "+",
+        TipoToken.OpNot : "!",
+        TipoToken.OpMenos : "-",
+        TipoToken.OpMultiplicacao : "*",
+    }
+
+
     separadores = {
         "," : TipoToken.SepVirgula,
         "." : TipoToken.SepPonto,
@@ -117,6 +133,22 @@ class Gerenciador:
 
     }
 
+    def retornaBoolean(self, tipoToken):
+        return ((tipoToken == TipoToken.OpIgualdade) or 
+                (tipoToken == TipoToken.OpMenorIgual) or 
+                (tipoToken == TipoToken.OpMaior) or 
+                (tipoToken == TipoToken.OpNot) or 
+                (tipoToken == TipoToken.OpAnd))
+
+    def ehIncremento(self, tipoToken):
+        return ((tipoToken == TipoToken.OpDecremento) or
+                (tipoToken == TipoToken.OpIncremento))
+
+    def retornaValor(self, tipoToken):
+        return ((tipoToken == TipoToken.OpSoma) or 
+                (tipoToken == TipoToken.OpMenos) or 
+                (tipoToken == TipoToken.OpMultiplicacao))
+
 
     def getTipoToken(self, palavra):
         if(palavra in self.operadores):
@@ -132,3 +164,6 @@ class Gerenciador:
         if(palavra[0] == '"' and palavra[len(palavra) - 1] == '"'):
             return TipoToken.StringLiteral
         return TipoToken.Identificador
+
+    def getStringOperador(self, tipoToken):
+        return self.revertorOperadores[tipoToken]

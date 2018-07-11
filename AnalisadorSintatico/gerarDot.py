@@ -5,9 +5,10 @@ import re
 def main():
     print('entrada: {}  saida: {}'.format(sys.argv[1], sys.argv[2]))
 
-    linhas = open(sys.argv[1], 'r').read().splitlines()
+    linhas = open(sys.argv[1], 'r').read().strip().splitlines()
 
-    regexLinha = re.compile('(\d+) (<?\w+(,.+)?>?) (\d+) (\d+|None)')
+    # regexLinha = re.compile('(\d+) (<?\w+(,.+)?>?) (\d+) (\d+|None)')
+    regexLinha = re.compile('(\d+) (.+) (\d+) (\d+|None)')
 
     arvore = []
     for l in linhas:

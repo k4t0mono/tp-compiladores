@@ -38,7 +38,7 @@ class Arvore:
         if(noh.pai != None):
             pai = noh.pai.id
         saida += str(noh.id) + " "
-        print('O erro aqui: {}'.format(noh.valor))
+        # print('O erro aqui: {}'.format(noh.valor))
         if(noh.valor.tipoToken == TipoToken.Identificador or noh.valor.tipoToken == TipoToken.IntLiteral):
             saida += self.tabelaSimbolos.tabela[noh.valor.linhaTabela].valor
         else:
@@ -61,13 +61,13 @@ class Arvore:
     def geraCodigoRec(self, noh):
         if not self.ehFolha(noh.filhoDir):
             self.geraCodigoRec(noh.filhoDir)
-        else:
-            print("----------------")
+        # else:
+            # print("----------------")
             # print(noh.filhoDir.valor)
         if not self.ehFolha(noh.filhoEsq):
             self.geraCodigoRec(noh.filhoEsq)
-        else:
-            print("----------------")
+        # else:
+            # print("----------------")
             # print(noh.filhoEsq.valor)
         
 
@@ -133,7 +133,7 @@ class Noh:
     def quebraNoh(self):
         for i in range(len(self.valor)):
             # print("Thuza: {}".format(self.valor))
-            printInstrucao(self.valor)
+            # printInstrucao(self.valor)
             if(self.valor[i].tipoToken == TipoToken.OpAtribuicao):
                 self.filhoEsq = Noh(self.valor[:i], self)
                 self.filhoDir = Noh(self.valor[i+1:], self)
@@ -194,7 +194,7 @@ def separaInstrucoes(tokens):
     lista_aux = []
     for i in range(len(tokens)):
         if(tokens[i].tipoToken == TipoToken.SepPontoVirgula):
-            print('gggg: {}'.format(lista_aux[0]))
+            # print('gggg: {}'.format(lista_aux[0]))
             if(lista_aux[0].tipoToken == TipoToken.PCInt or lista_aux[0].tipoToken == TipoToken.PCBoolean or lista_aux[0].tipoToken == TipoToken.PCChar):
                 lista_aux = lista_aux[1:]
             instrucoes.append(copy.deepcopy(lista_aux))
@@ -205,18 +205,23 @@ def separaInstrucoes(tokens):
     return instrucoes
 
 
-def limpaTokens(tokens):
-    corte = 0
+def limpaTokens(tokens, tabela):
+    corte1 = 0
     for i in range(len(tokens)):
-        if(tokens[i].tipoToken == TipoToken.PCVoid):
-            corte = i + 5
+        if(tokens[i].tipoToken == TipoToken.PCVoid and tabela.tabela[tokens[i+1].linhaTabela].valor == 'main'):
+            corte1 = i + 5
     
-    t = tokens[corte:-2]
+    corte2 = corte1
+    for i in range(corte1, len(tokens)):
+        if(tokens[i].tipoToken == TipoToken.SepFechaChaves):
+            corte2 = i-1
+
+    t = tokens[corte1:corte2]
     
     return t
 
 def main(tokensOld, tabelaSimbolos):
-    tokens = limpaTokens(tokensOld)
+    tokens = limpaTokens(tokensOld, tabelaSimbolos)
     instrucoes = separaInstrucoes(tokens)
     idMaster = ID()
     saida = ""

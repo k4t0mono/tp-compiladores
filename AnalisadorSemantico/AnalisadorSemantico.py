@@ -24,23 +24,37 @@ class AnalisadorSemantico:
         self.TABELA_AUX = tabelaAux
     
     def verificaEscopoAnterior(self, escopo, valor, linha):
+        # print(self.pilhaEscopo)
+        
         achou = False
-        escopoVerificado = copy.deepcopy(escopo)
-        while(not achou and (escopoVerificado > 0)):
-            resultado = self.TABELA_AUX.get(valor, escopoVerificado)
+        i = len(self.pilhaEscopo) - 1
+        while(not achou and i > -1):
+            resultado = self.TABELA_AUX.get(valor, self.pilhaEscopo[i])
             if(resultado == None):
-                escopoVerificado -= 1
-                continue
-            if(resultado['nivelEscopo'] >= self.nivelEscopo):
-                escopoVerificado -= 1
-                continue
-            if(resultado["linha"] > linha):
-                escopoVerificado -= 1
+                i -= 1
                 continue
             achou = True
         if(achou):
-            self.TABELA_SIMBOLOS.tabela[linha].linhaTabelaAux = resultado["id"]
+             self.TABELA_SIMBOLOS.tabela[linha].linhaTabelaAux = resultado["id"]
         return achou
+        
+        # achou = False
+        # escopoVerificado = copy.deepcopy(escopo)
+        # while(not achou and (escopoVerificado > 0)):
+        #     resultado = self.TABELA_AUX.get(valor, escopoVerificado)
+        #     if(resultado == None):
+        #         escopoVerificado -= 1
+        #         continue
+        #     if(resultado['nivelEscopo'] >= self.nivelEscopo):
+        #         escopoVerificado -= 1
+        #         continue
+        #     if(resultado["linha"] > linha):
+        #         escopoVerificado -= 1
+        #         continue
+        #     achou = True
+        # if(achou):
+        #     self.TABELA_SIMBOLOS.tabela[linha].linhaTabelaAux = resultado["id"]
+        # return achou
 
     def verificaEscopoDaVariavel(self, i, token):
         valor = self.TABELA_SIMBOLOS.tabela[token.linhaTabela].valor
